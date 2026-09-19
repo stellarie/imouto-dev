@@ -46,21 +46,24 @@ function liveSmoke() {
   const node = "C:/Users/Stella/AppData/Local/mise/installs/node/24.18.0/node.exe";
   const tsx = path.join(driver, "node_modules/tsx/dist/cli.mjs").replaceAll("\\", "/");
   const entry = path.join(driver, "src/mcp.ts").replaceAll("\\", "/");
-  fs.writeFileSync(overlay, `- id: imouto-blackboard\n  name: dsh-imouto-dev-process\n- insert:\n    - id: imouto-mcp\n      name: '@deepseek-ai/dsh-mcp-client'\n      config:\n        serverName: imouto\n        transport: stdio\n        toolCallTimeoutMs: 180000\n        command: ${JSON.stringify(node)}\n        args: [${JSON.stringify(tsx)}, ${JSON.stringify(entry)}]\n        env:\n          IMOUTO_STATE_HOME: ${JSON.stringify(state.replaceAll("\\", "/"))}\n`);
+  const blackboard = path.join(staged, "dsh-imouto-dev-process/lib/index.js").replaceAll("\\", "/");
+  fs.writeFileSync(overlay, `- insert:\n    - id: imouto-blackboard\n      name: ${JSON.stringify(blackboard)}\n    - id: imouto-mcp\n      name: '@deepseek-ai/dsh-mcp-client'\n      config:\n        serverName: imouto\n        transport: stdio\n        toolCallTimeoutMs: 180000\n        command: ${JSON.stringify(node)}\n        args: [${JSON.stringify(tsx)}, ${JSON.stringify(entry)}]\n        env:\n          IMOUTO_STATE_HOME: ${JSON.stringify(state.replaceAll("\\", "/"))}\n`);
   const env = { ...process.env, DEEPSEEK_API_KEY: match[1].trim() };
   let result = run(["--profile", "imouto-live", "--from-default-profile", "headless", "--dump-config"], env);
   assert("scratch headless profile", result.status === 0, result.stderr);
-  result = run(["plugin", "--profile", "imouto-live", "add", path.join(staged, "dsh-imouto-dev-process")], env);
-  assert("install live process bundle", result.status === 0, result.stderr);
   result = run(["plugin", "--profile", "imouto-live", "add", path.join(harness, "packages/core/tools"), path.join(harness, "vendor/cordis")], env);
   assert("link live peer packages", result.status === 0, result.stderr);
   result = run(["--profile", "imouto-live", "--patch", overlay, "Call the tool mcp__imouto__health. Print its stateDir value only."], env);
   assert("imouto health task", result.status === 0, result.stderr);
+  assert("health plugin imports", !/failed to import/i.test(result.stderr), result.stderr);
   assert("health uses temporary state", result.stdout.toLowerCase().includes(state.toLowerCase()), result.stdout);
   const fixture = path.join(repo, "tools/blackboard/fixtures/valid.md");
   result = run(["--profile", "imouto-live", "--patch", overlay, `Call the tool blackboard_validate on ${fixture}. Print the result only.`], env);
   assert("blackboard validation task", result.status === 0, result.stderr);
-  assert("validator reports ok", /\bok\b/i.test(result.stdout), result.stdout);
+  assert("blackboard plugin imports", !/failed to import/i.test(result.stderr), result.stderr);
+  const output = result.stdout.trim();
+  const reported = output.startsWith("`") && output.endsWith("`") ? output.slice(1, -1) : output;
+  assert("validator reports exact result", reported === `${fixture}: ok`, result.stdout);
 }
 
 try {
