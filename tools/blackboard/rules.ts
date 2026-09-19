@@ -2,7 +2,7 @@ import path from "node:path";
 import { parse, lineOf } from "./parse.js";
 export interface Finding { rule: string; severity: "error" | "warn"; line: number; message: string }
 const required = ["protocol","task","initiator","execution_mode","status","owner","next_action","created","updated","project","base_revision"];
-const enums: Record<string,string[]> = { initiator:["Chloe","Sherry","oniichan"], execution_mode:["solo","delegated","auto"], coordination_transport:["native","discord"], status:["planning","ready","implementing","review","verifying","done","blocked"], owner:["Chloe","Sherry","oniichan","none"] };
+const enums: Record<string,string[]> = { initiator:["Chloe","Sherry","Yuu","oniichan"], execution_mode:["solo","delegated","auto"], coordination_transport:["native","discord","driver"], status:["planning","ready","implementing","review","verifying","done","blocked"], owner:["Chloe","Sherry","Yuu","oniichan","none"] };
 function section(body: string, name: string): string | undefined { return new RegExp(`^## ${name}\\r?\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m").exec(body)?.[1]; }
 function finding(rule: string, severity: "error"|"warn", line: number, message: string): Finding { return { rule, severity, line, message }; }
 export function validate(file: string, text: string): Finding[] | "legacy" {
@@ -33,7 +33,7 @@ export function validate(file: string, text: string): Finding[] | "legacy" {
     for (const block of blocks) {
       const body = block[1] ?? ""; const values = Object.fromEntries([...body.matchAll(/^- ([^:]+): (.*)$/gm)].map((m)=>[m[1],m[2]]));
       for (const field of fields) if (!(field in values)) out.push(finding("subimouto-fields","error",lineOf(text,block[0]),`missing ${field}`));
-      if (values["Spawned by"] && !["Chloe","Sherry"].includes(values["Spawned by"])) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Spawned by"));
+      if (values["Spawned by"] && !["Chloe","Sherry","Yuu"].includes(values["Spawned by"])) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Spawned by"));
       if (values.Role && !["explore","implement","review","repair","integrate"].includes(values.Role)) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Role"));
       if (values.Effort && !["minimal","low","medium","high","xhigh","max","ultra"].includes(values.Effort)) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Effort"));
       if (values.Model && (["gpt-5.6-terra","gpt-6-astra","subimouto"].includes(values.Model) || values.Model.endsWith("-max"))) out.push(finding("subimouto-model","error",lineOf(text,block[0]),"invalid Model"));

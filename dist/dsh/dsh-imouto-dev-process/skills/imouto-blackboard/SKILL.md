@@ -1,7 +1,9 @@
 ---
-protocol: imouto-blackboard/v1
-updated: 2026-09-06
+name: imouto-blackboard
+description: Validate and update imouto blackboard task files.
 ---
+
+# Imouto Blackboard
 
 # Imouto Blackboard Protocol
 
