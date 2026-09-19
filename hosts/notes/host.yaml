@@ -1,0 +1,6 @@
+host: notes
+vars: {}
+outputs:
+  - from: canon/protocol.md
+    to: notes/PROTOCOL.md
+    install: C:\Users\Stella\notes\blackboard\PROTOCOL.md

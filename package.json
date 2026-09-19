@@ -1,0 +1,19 @@
+{
+  "name": "imouto-dev-canon",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.10.0",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "generate": "tsx scripts/generate.ts",
+    "check": "tsx scripts/generate.ts --check",
+    "check:live": "tsx scripts/check-live.ts",
+    "install-outputs": "tsx scripts/install.ts",
+    "bb": "tsx tools/blackboard/cli.ts"
+  },
+  "dependencies": { "yaml": "^2.8.1" },
+  "devDependencies": { "@types/node": "^24", "tsx": "^4", "typescript": "^5.5", "vitest": "^2" }
+}

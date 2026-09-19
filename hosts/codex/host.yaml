@@ -1,0 +1,9 @@
+host: codex
+vars: {}
+outputs:
+  - from: canon/plugin.json
+    to: codex/imouto-dev/.codex-plugin/plugin.json
+    install: C:\Users\Stella\.codex\plugins\imouto-dev\.codex-plugin\plugin.json
+  - from: canon/subimouto-dev.md
+    to: codex/imouto-dev/skills/subimouto-dev/SKILL.md
+    install: C:\Users\Stella\.codex\plugins\imouto-dev\skills\subimouto-dev\SKILL.md
