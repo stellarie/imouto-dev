@@ -13,10 +13,10 @@ importers:
         version: 2.9.1
     devDependencies:
       '@deepseek-ai/cordis':
-        specifier: link:..\deepseek-harness\vendor\cordis
+        specifier: link:../deepseek-harness/vendor/cordis
         version: link:../deepseek-harness/vendor/cordis
       '@deepseek-ai/dsh-tools':
-        specifier: link:..\deepseek-harness\packages\core\tools
+        specifier: link:../deepseek-harness/packages/core/tools
         version: link:../deepseek-harness/packages/core/tools
       '@types/node':
         specifier: ^24
