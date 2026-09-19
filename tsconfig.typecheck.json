@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@deepseek-ai/cordis": ["./types/dsh-stubs.d.ts"],
+      "@deepseek-ai/dsh-tools/src/schema.ts": ["./types/dsh-stubs.d.ts"]
+    }
+  }
+}

@@ -8,7 +8,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "test": "vitest run",
     "build:dsh": "tsx scripts/build-dsh.ts",
     "generate": "tsx scripts/generate.ts",
