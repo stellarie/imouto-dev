@@ -25,8 +25,8 @@ export function apply(ctx: Context) {
     name: "blackboard_validate",
     description: "Validate one absolute Markdown blackboard task path.",
     parameters: { path: { type: "string", required: true } },
-    output: { schema: { type: "string" }, render: (_args, value) => [{ type: "text", text: value }] },
-    execute: async (args) => validationLines(markdownPath(args.path)),
+    output: { schema: { type: "string" }, render: (_args: unknown, value: string) => [{ type: "text", text: value }] },
+    execute: async (args: { path: string }) => validationLines(markdownPath(args.path)),
   }));
   ctx.tools.register(defineTool({
     name: "blackboard_transition",
@@ -38,8 +38,8 @@ export function apply(ctx: Context) {
       next_action: { type: "string", required: true },
       verifier: { type: "string" },
     },
-    output: { schema: { type: "string" }, render: (_args, value) => [{ type: "text", text: value }] },
-    execute: async (args) => {
+    output: { schema: { type: "string" }, render: (_args: unknown, value: string) => [{ type: "text", text: value }] },
+    execute: async (args: { path: string; to: string; owner: string; next_action: string; verifier?: string }) => {
       const file = markdownPath(args.path);
       const result = transition(fs.readFileSync(file, "utf8"), { to: args.to as Status, owner: args.owner as Owner, nextAction: args.next_action, verifier: args.verifier, today: new Date().toISOString().slice(0, 10) });
       const temporary = `${file}.tmp-${process.pid}`;
