@@ -1,4 +1,99 @@
-import { describe,expect,it } from "vitest";import { validate } from "./rules.js";
-const fm=`---\nprotocol: imouto-blackboard/v1\ntask: task\ninitiator: Sherry\nexecution_mode: auto\ncoordination_transport: native\nstatus: implementing\nowner: Sherry\nnext_action: Work.\ncreated: 2026-09-19\nupdated: 2026-09-19\nproject: x\nbase_revision: abc\n---\n`;const sections=`## Objective\nx\n## Acceptance Test\n- [auto] x\n## Plan\nx\n## Work Items\nx\n## Implementation Notes\nx\n## Review\nx\n## Subimoutos\nNone.\n## Thread\nx\n`;const valid=fm+sections;
-describe("rules",()=>{it("accepts a valid file",()=>expect(validate("task.md",valid)).toEqual([]));it("reports legacy",()=>expect(validate("old.md","# old")).toBe("legacy"));const cases:[string,string,string][]=[
-["fm-required","project: x\n",""],["fm-enum","owner: Sherry","owner: bad"],["fm-task-slug","task: task","task: wrong"],["fm-date","created: 2026-09-19","created: yesterday"],["verifying-verifier","status: implementing","status: verifying"],["done-owner","status: implementing","status: done"],["section-required","## Objective\nx\n",""] ,["section-expected","## Review\nx\n",""] ,["acceptance-tag","- [auto] x","- x"]];for(const [rule,a,b] of cases)it(`checks ${rule}`,()=>expect(validate("task.md",valid.replace(a,b))).toEqual(expect.arrayContaining([expect.objectContaining({rule})])));it("reports YAML parse",()=>expect(validate("task.md",valid.replace("owner: Sherry","owner: ["))).toEqual(expect.arrayContaining([expect.objectContaining({rule:"fm-parse"})])));it("checks subimouto fields and enums",()=>{const body=`### Riko\n- Spawned by: Yuu\n- Role: bad\n- Model: gpt-6-astra\n- Effort: normal\n`;const result=validate("task.md",valid.replace("None.",body));for(const rule of ["subimouto-fields","subimouto-enum","subimouto-model"])expect(result).toEqual(expect.arrayContaining([expect.objectContaining({rule})]));});});
+import { describe, expect, it } from "vitest";
+import { validate } from "./rules.js";
+
+const frontmatter = `---
+protocol: imouto-blackboard/v1
+task: task
+initiator: Sherry
+execution_mode: auto
+coordination_transport: native
+status: implementing
+owner: Sherry
+next_action: Work.
+created: 2026-09-19
+updated: 2026-09-19
+project: x
+base_revision: abc
+---
+`;
+const completeBlock = `### Riko
+- Spawned by: Sherry
+- Role: implement
+- Model: gpt-5.6-luna
+- Effort: max
+- Host ID: /root/riko
+- Work file: task.work/W001-riko-implement.md
+- Task: Implement the bounded task.
+- Outcome: Completed the bounded task.
+`;
+function fixture(subimoutos = "None."): string {
+  return `${frontmatter}## Objective
+x
+## Acceptance Test
+- [auto] x
+## Plan
+x
+## Work Items
+x
+## Implementation Notes
+x
+## Review
+x
+## Subimoutos
+${subimoutos}
+## Thread
+x
+`;
+}
+function rules(text: string): string[] {
+  const result = validate("task.md", text);
+  if (result === "legacy") return ["legacy"];
+  return result.map((finding) => finding.rule);
+}
+
+describe("frontmatter and sections", () => {
+  it("accepts a valid file", () => expect(validate("task.md", fixture())).toEqual([]));
+  it("reports a file without frontmatter as legacy", () => expect(validate("old.md", "# old")).toBe("legacy"));
+  it("reports malformed delimited YAML as fm-parse", () => {
+    expect(rules("---\nowner: [\n---\n")).toEqual(["fm-parse"]);
+  });
+  const cases: [string, string, string][] = [
+    ["fm-required", "project: x\n", ""],
+    ["fm-enum", "owner: Sherry", "owner: bad"],
+    ["fm-task-slug", "task: task", "task: wrong"],
+    ["fm-date", "created: 2026-09-19", "created: yesterday"],
+    ["verifying-verifier", "status: implementing", "status: verifying"],
+    ["done-owner", "status: implementing", "status: done"],
+    ["section-required", "## Objective\nx\n", ""],
+    ["section-expected", "## Review\nx\n", ""],
+    ["acceptance-tag", "- [auto] x", "- x"],
+  ];
+  for (const [rule, from, to] of cases) {
+    it(`isolates ${rule}`, () => expect(rules(fixture().replace(from, to))).toContain(rule));
+  }
+});
+
+describe("subimouto fixtures", () => {
+  it("accepts None", () => expect(rules(fixture("None."))).toEqual([]));
+  it("accepts one complete valid block", () => expect(rules(fixture(completeBlock))).toEqual([]));
+  it("rejects an empty body", () => expect(rules(fixture(""))).toContain("subimouto-fields"));
+  for (const field of ["Spawned by", "Role", "Model", "Effort", "Host ID", "Work file", "Task", "Outcome"]) {
+    it(`rejects a block missing ${field}`, () => {
+      const incomplete = completeBlock.replace(new RegExp(`^- ${field}:.*\\n`, "m"), "");
+      expect(rules(fixture(incomplete))).toContain("subimouto-fields");
+    });
+  }
+  const enumCases: [string, string][] = [
+    ["- Spawned by: Sherry", "- Spawned by: Yuu"],
+    ["- Role: implement", "- Role: invalid"],
+    ["- Effort: max", "- Effort: normal"],
+  ];
+  for (const [from, to] of enumCases) {
+    it(`rejects invalid enum ${to}`, () => expect(rules(fixture(completeBlock.replace(from, to)))).toContain("subimouto-enum"));
+  }
+  for (const model of ["gpt-5.6-terra", "gpt-6-astra", "gpt-5.6-luna-max", "subimouto"]) {
+    it(`rejects model ${model}`, () => {
+      expect(rules(fixture(completeBlock.replace("gpt-5.6-luna", model)))).toContain("subimouto-model");
+    });
+  }
+});

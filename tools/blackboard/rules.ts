@@ -7,7 +7,12 @@ function section(body: string, name: string): string | undefined { return new Re
 function finding(rule: string, severity: "error"|"warn", line: number, message: string): Finding { return { rule, severity, line, message }; }
 export function validate(file: string, text: string): Finding[] | "legacy" {
   let parsed;
-  try { parsed = parse(text); } catch (error) { return text.includes("protocol:") ? [finding("fm-parse","error",1,String(error))] : "legacy"; }
+  try { parsed = parse(text); } catch (error) {
+    const source = text.replace(/^\uFEFF/, "");
+    return source.startsWith("---\n") || source.startsWith("---\r\n")
+      ? [finding("fm-parse","error",1,String(error))]
+      : "legacy";
+  }
   if (!("protocol" in parsed.data)) return "legacy";
   const out: Finding[] = [];
   for (const key of required) if (!(key in parsed.data)) out.push(finding("fm-required","error",1,`missing ${key}`));
@@ -24,7 +29,7 @@ export function validate(file: string, text: string): Finding[] | "legacy" {
   if (subs !== undefined && subs.trim() !== "None.") {
     const blocks = [...subs.matchAll(/^### .+\r?\n([\s\S]*?)(?=^### |(?![\s\S]))/gm)];
     const fields = ["Spawned by","Role","Model","Effort","Host ID","Work file","Task","Outcome"];
-    if (!blocks.length && subs.trim()) out.push(finding("subimouto-fields","error",lineOf(text,"## Subimoutos"),"missing subimouto block"));
+    if (!blocks.length) out.push(finding("subimouto-fields","error",lineOf(text,"## Subimoutos"),"missing subimouto block"));
     for (const block of blocks) {
       const body = block[1] ?? ""; const values = Object.fromEntries([...body.matchAll(/^- ([^:]+): (.*)$/gm)].map((m)=>[m[1],m[2]]));
       for (const field of fields) if (!(field in values)) out.push(finding("subimouto-fields","error",lineOf(text,block[0]),`missing ${field}`));
