@@ -4,7 +4,7 @@ import { expect, it } from "vitest";
 
 const root = path.resolve(import.meta.dirname, "..");
 it("changes protocol only through planned additions and four replacements", () => {
-  const golden = fs.readFileSync(path.join(root, "golden/PROTOCOL.md"), "utf8").split(/\r?\n/);
+  const golden = fs.readFileSync(path.join(root, "golden/protocol.md"), "utf8").split(/\r?\n/);
   const actual = fs.readFileSync(path.join(root, "dist/notes/PROTOCOL.md"), "utf8").split(/\r?\n/);
   const additions = new Set([
     "Use `driver` for imouto-driver workers. Workers cannot write the blackboard.",
