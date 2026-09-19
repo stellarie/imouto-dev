@@ -1,0 +1,11 @@
+{
+  "name": "imouto-dev",
+  "version": "1.0.0",
+  "description": "Sherry's structured development skill with subimouto dispatch for complex tasks",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Imouto Dev",
+    "shortDescription": "Structured implementation with subimouto sub-agents",
+    "category": "Productivity"
+  }
+}

@@ -1,0 +1,9 @@
+host: claude
+vars: {}
+outputs:
+  - from: canon/imouto-plan.md
+    to: claude/skills/imouto-plan/SKILL.md
+    install: C:\Users\Stella\.claude\skills\imouto-plan\SKILL.md
+  - from: canon/imouto-dispatch.md
+    to: claude/skills/imouto-dispatch/SKILL.md
+    install: C:\Users\Stella\.claude\skills\imouto-dispatch\SKILL.md
