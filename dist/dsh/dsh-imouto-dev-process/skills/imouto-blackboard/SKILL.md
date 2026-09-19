@@ -5,6 +5,7 @@ description: Validate and update imouto blackboard task files.
 
 # Imouto Blackboard
 
+
 # Imouto Blackboard Protocol
 
 This file is the canonical blackboard specification for Chloe, Sherry, and

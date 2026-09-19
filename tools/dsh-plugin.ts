@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Context } from "@deepseek-ai/cordis";
-import { defineTool } from "@deepseek-ai/dsh-tools";
+import { defineTool } from "@deepseek-ai/dsh-tools/src/schema.ts";
 import { validate } from "./blackboard/rules.js";
 import { transition, type Owner, type Status } from "./blackboard/transition.js";
 

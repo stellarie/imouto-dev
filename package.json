@@ -10,7 +10,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build:dsh": "esbuild tools/dsh-plugin.ts --bundle --platform=node --format=esm --packages=bundle --external:@deepseek-ai/* --outfile=dist/dsh/dsh-imouto-dev-process/lib/index.js",
+    "build:dsh": "tsx scripts/build-dsh.ts",
     "generate": "tsx scripts/generate.ts",
     "check": "tsx scripts/generate.ts --check",
     "check:live": "tsx scripts/check-live.ts",

@@ -3,8 +3,8 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSpecs } from "./specs.js";
-import { buildSync } from "esbuild";
 import type { VariableSpec } from "./specs.js";
+import { buildDsh } from "./build-dsh.js";
 
 export interface OutputSpec { from: string | string[]; to: string; install: string; prepend?: string; stripFrontmatter?: boolean }
 export interface HostSpec { host: string; vars: Record<string, VariableSpec>; outputs: OutputSpec[] }
@@ -43,7 +43,8 @@ export function generateAll(repoRoot: string, outDir: string): Map<string, strin
     const vars = Object.fromEntries(Object.entries(spec.vars).map(([name, value]) => {
       if (typeof value === "string") return [name, value];
       const source = fs.readFileSync(path.join(repoRoot, value.file), "utf8").replace(/\r\n/g, "\n").replace(/\n$/, "");
-      return [name, source.replace(/\n/g, `\n${" ".repeat(value.indent)}`)];
+      const indent = " ".repeat(value.indent);
+      return [name, source.split("\n").map((line, index) => index === 0 || !line ? line : `${indent}${line}`).join("\n")];
     }));
     for (const output of spec.outputs) {
       const sources = (Array.isArray(output.from) ? output.from : [output.from]).map((name) => {
@@ -61,7 +62,7 @@ export function generateAll(repoRoot: string, outDir: string): Map<string, strin
   }
   const pluginTarget = path.join(outDir, "dsh/dsh-imouto-dev-process/lib/index.js");
   fs.mkdirSync(path.dirname(pluginTarget), { recursive: true });
-  buildSync({ entryPoints: [path.join(repoRoot, "tools/dsh-plugin.ts")], outfile: pluginTarget, bundle: true, platform: "node", format: "esm", packages: "bundle", external: ["@deepseek-ai/*"], nodePaths: [path.join(repoRoot, "node_modules"), path.resolve(import.meta.dirname, "../node_modules")] });
+  buildDsh(repoRoot, pluginTarget);
   generated.set("dsh/dsh-imouto-dev-process/lib/index.js", fs.readFileSync(pluginTarget, "utf8"));
   return generated;
 }

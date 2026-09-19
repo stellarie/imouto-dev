@@ -17,12 +17,12 @@ outputs:
   - from: canon/protocol.md
     to: dsh/dsh-imouto-dev-process/skills/imouto-blackboard/SKILL.md
     install: ''
-    prepend: '{{imouto:blackboard_prepend}}'
+    prepend: "{{imouto:blackboard_prepend}}\n\n"
     stripFrontmatter: true
   - from: [canon/standards/completion-gate.md, canon/standards/branch-names.md]
     to: dsh/dsh-imouto-dev-process/skills/imouto-standards/SKILL.md
     install: ''
-    prepend: '{{imouto:standards_prepend}}'
+    prepend: "{{imouto:standards_prepend}}\n\n"
   - from: hosts/dsh/bundle-package.json
     to: dsh/dsh-imouto-dev/package.json
     install: ''

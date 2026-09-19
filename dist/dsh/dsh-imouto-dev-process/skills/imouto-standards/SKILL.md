@@ -5,6 +5,7 @@ description: Apply the imouto development completion and branch standards.
 
 # Imouto Standards
 
+
 After development work, complete every applicable gate before claiming success.
 
 - Build every affected buildable target.
