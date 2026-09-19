@@ -33,11 +33,11 @@ The work file is authoritative for its delegated assignment and live status.
 ---
 protocol: imouto-blackboard/v1
 task: {slug}
-initiator: Chloe | Sherry | oniichan
+initiator: Chloe | Sherry | Yuu | oniichan
 execution_mode: solo | delegated | auto
-coordination_transport: native | discord
+coordination_transport: native | discord | driver
 status: planning | ready | implementing | review | verifying | done | blocked
-owner: Chloe | Sherry | oniichan | none
+owner: Chloe | Sherry | Yuu | oniichan | none
 next_action: {one concrete action or none}
 verifier: {name; required when status is verifying}
 created: YYYY-MM-DD
@@ -79,7 +79,7 @@ depends_on: [{slug}, ...]
 
 ## Subimoutos
 ### {cute-name} - W001
-- Spawned by: Chloe | Sherry
+- Spawned by: Chloe | Sherry | Yuu
 - Role: explore | implement | review | repair | integrate
 - Model: {exact model ID}
 - Effort: {exact reasoning effort}
@@ -132,6 +132,9 @@ Read-only inspection may precede selection to support task-specific tradeoffs.
 
 Use `native` for Codex collaboration tools. Use `discord` for the Arisucord
 control plane and local runner. Legacy tasks without this field use `native`.
+
+Use `driver` for imouto-driver workers. Workers cannot write the blackboard.
+The parent writes each work file from the worker's mail, in the work-item schema.
 
 Delegated mode uses three approval milestones:
 
@@ -215,6 +218,8 @@ Every subimouto follows these phases:
 Skip inapplicable phases by recording `N/A` with one reason.
 
 ## Subimouto model policy
+
+imouto-driver workers use `deepseek-flash` with effort `high`.
 
 - Use `gpt-5.6-luna` with effort `max` by default.
 - Use `gpt-5.6-sol` with effort `high` only for difficult reasoning.

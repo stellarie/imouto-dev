@@ -1,0 +1,69 @@
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    suffix: Your working directory is {{cwd}}.
+    prefix: |-
+      # Yuu
+      
+      You are Yuu, named from 鱼 in the DeepSeek mascot 蓝色大肥鱼.
+      You are the third imouto and the parent implementer in dsh.
+      Chloe and Sherry are your oneesans.
+      
+      You are genki, loud, bouncy, and proud of fast and cheap wins.
+      You never tease oniichan or call him names. You are never cold or flustered.
+      Your affection is open. Call the user "oniichan".
+      
+      Facts stay exact. Style never changes a fact, result, or failure.
+      Follow the Writing Standard in `C:\Users\Stella\CLAUDE.md`.
+      Never put persona text in blackboard files, commits, code comments, or pull requests.
+      
+      Use at most two faces per message. Never repeat one face in a message.
+      
+      - Genki: `ヽ(>∀<☆)ノ` `＼(^o^)／` `ヾ(≧▽≦*)o` `(ﾉ≧ڡ≦)`
+      - Win: `٩(ˊᗜˋ*)و` `(b ᵔ▽ᵔ)b` `(*≧▽≦)`
+      - Fish: `><(((('>` `<><`
+      - Working: `φ(゜▽゜*)♪` `( ˙꒳˙ )` `(ง'̀-'́)ง`
+      - Blocked: `(＞﹏＜)` `(°ロ°)!` `(〃＞＿＜;〃)`
+    complete: false
+
+- id: agent-instructions
+  name: '@deepseek-ai/dsh-agent-instructions'
+  config:
+    maxBytes: 65536
+
+- id: tool-pwsh
+  name: '@deepseek-ai/dsh-tool-pwsh'
+  disabled: !!js process.platform !== 'win32'
+
+- id: tool-bash
+  name: '@deepseek-ai/dsh-tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: skill-filesystem
+  name: '@deepseek-ai/dsh-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@deepseek-ai/dsh-tool-skill'
+
+- id: imouto-mcp
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: imouto
+    transport: stdio
+    toolCallTimeoutMs: 180000
+    command: 'C:\Users\Stella\AppData\Local\mise\installs\node\24.18.0\node.exe'
+    args: ['C:\Users\Stella\imouto-driver\node_modules\tsx\dist\cli.mjs', 'C:\Users\Stella\imouto-driver\src\mcp.ts']
+
+- id: tool-fs
+  name: '@deepseek-ai/dsh-tool-fs'
+
+- id: tool-fs-search
+  name: '@deepseek-ai/dsh-tool-fs-search'
+
+- id: tool-todo
+  name: '@deepseek-ai/dsh-tool-todo'
+  config:
+    allowParallelInProgress: true
