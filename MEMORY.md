@@ -33,6 +33,7 @@ This repository generates imouto process outputs and validates blackboard task f
 - Live standards may use mixed line endings -> normalize carriage returns before extraction. [status: active] [verified: 2026-09-19] [source: scripts/check-live.ts]
 - ESM bundles using YAML need a `createRequire` banner -> use `scripts/build-dsh.ts`. [status: active] [verified: 2026-09-19] [source: scripts/build-dsh.ts; live smoke]
 - Live overlay plugins must use the staged absolute file -> bare bundle names resolve outside the overlay. [status: active] [verified: 2026-09-19] [source: scripts/dsh-smoke.ts]
+- Yuu copies standard tool rows -> preserve every required row config, including `sampleOverCapGlobResults`. [status: active] [verified: 2026-09-19] [source: hosts/dsh/agent.cordis.yml; scripts/parity.test.ts]
 
 ## Decisions
 
