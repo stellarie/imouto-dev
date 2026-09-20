@@ -261,7 +261,7 @@ export function apply(ctx: Context, config: Config): void {
     () => async () => {
       await service.dispose();
     },
-    "dsh-openai-codex: proxy transport"
+    "dsh-imouto-codex: proxy transport"
   );
   ctx.inject(["settings"], (settingsCtx) => {
     service.attachSettings(settingsCtx);
@@ -283,7 +283,7 @@ export function apply(ctx: Context, config: Config): void {
   );
   ctx.effect(
     () => installOpenAICodexModelFallback(ctx, service),
-    "dsh-openai-codex: backend model fallback"
+    "dsh-imouto-codex: backend model fallback"
   );
   ctx.web.registerSearchProvider(
     new OpenAICodexSearchProvider({

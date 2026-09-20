@@ -604,7 +604,7 @@ declare class FastModeRegistry {
 //#region src/fast-mode-paths.d.ts
 /** Node-free Fast Mode route constants shared by Host and browser halves. */
 /** GET/POST endpoint for one conversation's process-local Fast Mode state. */
-declare const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-openai-codex/fast-mode";
+declare const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-imouto-codex/fast-mode";
 //#endregion
 //#region src/model-fallback.d.ts
 /** Return the backend-ordered candidates for one exact blocked model. */

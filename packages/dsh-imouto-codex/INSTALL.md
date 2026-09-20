@@ -110,7 +110,7 @@ For the `web` profile, start `dsh web` if the user wants the application running
 
 - the root page loads;
 - its boot manifest contains `dsh-imouto-codex` and the plugin `client.js` URL;
-- `GET /plugins/dsh-openai-codex/auth/status` returns JSON without credentials;
+- `GET /plugins/dsh-imouto-codex/auth/status` returns JSON without credentials;
 - Settings contains an **OpenAI Codex** section.
 
 Do not call the login endpoint as a health check because it starts OAuth. The Web composer already owns image paste and drop; do not patch dsh for Ctrl+V. The bundle can extend Harness's `read_image` with HTTP(S) URL input and adds `imagegen`; the current model route must explicitly advertise image input before either tool returns an image. `imagegen.output_path` is optional: without it, the plugin writes a uniquely named PNG in the active workspace. The generated attachment remains available when policy or filesystem capability refuses that write.

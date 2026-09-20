@@ -188,7 +188,7 @@ export class ImageToolPolicy {
         unwatch();
         if (this.scope === scope) this.scope = undefined;
       },
-      "dsh-openai-codex: preferences"
+      "dsh-imouto-codex: preferences"
     );
   }
 

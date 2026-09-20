@@ -9,16 +9,16 @@ window.__ModuleLoader__.load({
 		let react_dom = require("react-dom");
 		//#region src/client/OpenAICodexSettings.tsx
 		/** Plugin-owned OpenAI Codex account page inside the dsh Settings shell. */
-		const STATUS_PATH = "/plugins/dsh-openai-codex/auth/status";
-		const LOGIN_PATH = "/plugins/dsh-openai-codex/auth/login";
-		const LOGOUT_PATH = "/plugins/dsh-openai-codex/auth/logout";
-		const IMAGE_TOOLS_PATH = "/plugins/dsh-openai-codex/image-tools";
-		const RESPONSE_API_PATH = "/plugins/dsh-openai-codex/response-api";
-		const MODEL_CATALOG_PATH = "/plugins/dsh-openai-codex/models";
-		const CONTEXT_WINDOW_PATH = "/plugins/dsh-openai-codex/context-window";
-		const FAST_MODE_SETTINGS_PATH = "/plugins/dsh-openai-codex/fast-mode-default";
-		const MODEL_FALLBACK_SETTINGS_PATH = "/plugins/dsh-openai-codex/model-fallback";
-		const PROXY_PATH = "/plugins/dsh-openai-codex/proxy";
+		const STATUS_PATH = "/plugins/dsh-imouto-codex/auth/status";
+		const LOGIN_PATH = "/plugins/dsh-imouto-codex/auth/login";
+		const LOGOUT_PATH = "/plugins/dsh-imouto-codex/auth/logout";
+		const IMAGE_TOOLS_PATH = "/plugins/dsh-imouto-codex/image-tools";
+		const RESPONSE_API_PATH = "/plugins/dsh-imouto-codex/response-api";
+		const MODEL_CATALOG_PATH = "/plugins/dsh-imouto-codex/models";
+		const CONTEXT_WINDOW_PATH = "/plugins/dsh-imouto-codex/context-window";
+		const FAST_MODE_SETTINGS_PATH = "/plugins/dsh-imouto-codex/fast-mode-default";
+		const MODEL_FALLBACK_SETTINGS_PATH = "/plugins/dsh-imouto-codex/model-fallback";
+		const PROXY_PATH = "/plugins/dsh-imouto-codex/proxy";
 		const POLL_INTERVAL_MS = 1e3;
 		const USAGE_POLL_INTERVAL_MS$1 = 6e4;
 		const pageStyle = {
@@ -1707,7 +1707,7 @@ window.__ModuleLoader__.load({
 		//#region src/fast-mode-paths.ts
 		/** Node-free Fast Mode route constants shared by Host and browser halves. */
 		/** GET/POST endpoint for one conversation's process-local Fast Mode state. */
-		const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-openai-codex/fast-mode";
+		const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-imouto-codex/fast-mode";
 		//#endregion
 		//#region src/client/OpenAICodexFastModeToggle.tsx
 		/** Per-conversation OpenAI Codex Fast Mode control for the Composer row. */
@@ -1926,7 +1926,7 @@ window.__ModuleLoader__.load({
 		//#region src/auth-paths.ts
 		/** Node-free route constants shared by the Host and browser plugin halves. */
 		/** Plugin-owned status endpoint consumed by its browser half. */
-		const OPENAI_CODEX_AUTH_STATUS_PATH = "/plugins/dsh-openai-codex/auth/status";
+		const OPENAI_CODEX_AUTH_STATUS_PATH = "/plugins/dsh-imouto-codex/auth/status";
 		//#endregion
 		//#region src/client/OpenAICodexQuotaIndicator.tsx
 		/** Compact weekly Codex quota indicator for the Composer tool row. */
@@ -2376,7 +2376,7 @@ window.__ModuleLoader__.load({
 			ctx.effect(() => ctx.locale.register(namespace, {
 				zh,
 				en
-			}), "dsh-openai-codex: settings copy");
+			}), "dsh-imouto-codex: settings copy");
 			const t = ctx.locale.bind(namespace);
 			const imageUrls = /* @__PURE__ */ new Map();
 			const createdUrls = /* @__PURE__ */ new Set();
@@ -2403,7 +2403,7 @@ window.__ModuleLoader__.load({
 				for (const url of createdUrls) URL.revokeObjectURL(url);
 				createdUrls.clear();
 				imageUrls.clear();
-			}, "dsh-openai-codex: release image URLs");
+			}, "dsh-imouto-codex: release image URLs");
 			ctx.slots.inject("settings.section", () => ctx.slots.register({
 				name: "settings.section",
 				id: "openai-codex",

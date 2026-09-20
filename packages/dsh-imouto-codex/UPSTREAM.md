@@ -12,3 +12,6 @@ The bundled `LICENSE` preserves the upstream Apache-2.0 license.
 The maintained package keeps the `openai-codex` provider identifier for dsh
 compatibility. Package names, executable names, diagnostics, and client module
 labels identify the maintained `dsh-imouto-codex` package.
+
+The `dsh-openai-codex-compaction-4f5cf1b7-v1` marker remains unchanged so
+existing encrypted compaction checkpoints stay readable after migration.

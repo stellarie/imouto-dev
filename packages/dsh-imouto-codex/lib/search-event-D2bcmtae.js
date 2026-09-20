@@ -679,7 +679,7 @@ const OPENAI_CODEX_SEARCH_MODEL_REQUEST_EVENT = "web/openai-codex-search-llm-req
 * `repair-session` command because their build-static migration runs first.
 */
 function installOpenAICodexSearchEvent() {
-	if (!(KNOWN_SESSION_EVENT_TYPES instanceof Set)) throw new Error("dsh-openai-codex: this Harness build does not expose an extensible session event vocabulary");
+	if (!(KNOWN_SESSION_EVENT_TYPES instanceof Set)) throw new Error("dsh-imouto-codex: this Harness build does not expose an extensible session event vocabulary");
 	KNOWN_SESSION_EVENT_TYPES.add(OPENAI_CODEX_SEARCH_MODEL_REQUEST_EVENT);
 }
 //#endregion

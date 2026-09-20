@@ -26,7 +26,7 @@ function credential(access = 'access-secret'): OAuthCredential {
 }
 
 async function store(): Promise<OpenAICodexCredentialStore> {
-  root = await mkdtemp(join(await realpath(tmpdir()), 'dsh-openai-codex-'))
+  root = await mkdtemp(join(await realpath(tmpdir()), 'dsh-imouto-codex-'))
   return new OpenAICodexCredentialStore(join(root, 'auth.json'))
 }
 

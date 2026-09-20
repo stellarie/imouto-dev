@@ -324,7 +324,7 @@ export const OPENAI_CODEX_RETRY_POLICY = resolveRetryPolicy(
     maxRetries: 5,
     backoff: { initialDelayMs: 1_000, maxDelayMs: 30_000, jitterRatio: 0.2 },
   },
-  "dsh-openai-codex retryPolicy"
+  "dsh-imouto-codex retryPolicy"
 );
 
 /**

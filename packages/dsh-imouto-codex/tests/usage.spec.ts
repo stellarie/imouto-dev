@@ -60,7 +60,7 @@ function payload(): unknown {
 }
 
 async function authenticatedStore(): Promise<OpenAICodexCredentialStore> {
-  root = await mkdtemp(join(await realpath(tmpdir()), 'dsh-openai-codex-usage-'))
+  root = await mkdtemp(join(await realpath(tmpdir()), 'dsh-imouto-codex-usage-'))
   const store = new OpenAICodexCredentialStore(join(root, 'auth.json'))
   const credential: OAuthCredential = {
     type: 'oauth',

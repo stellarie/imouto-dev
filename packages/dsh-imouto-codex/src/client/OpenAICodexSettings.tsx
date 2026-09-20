@@ -18,17 +18,17 @@ import type {
   ProxyPreferences,
 } from "../proxy.ts";
 
-const STATUS_PATH = "/plugins/dsh-openai-codex/auth/status";
-const LOGIN_PATH = "/plugins/dsh-openai-codex/auth/login";
-const LOGOUT_PATH = "/plugins/dsh-openai-codex/auth/logout";
-const IMAGE_TOOLS_PATH = "/plugins/dsh-openai-codex/image-tools";
-const RESPONSE_API_PATH = "/plugins/dsh-openai-codex/response-api";
-const MODEL_CATALOG_PATH = "/plugins/dsh-openai-codex/models";
-const CONTEXT_WINDOW_PATH = "/plugins/dsh-openai-codex/context-window";
-const FAST_MODE_SETTINGS_PATH = "/plugins/dsh-openai-codex/fast-mode-default";
+const STATUS_PATH = "/plugins/dsh-imouto-codex/auth/status";
+const LOGIN_PATH = "/plugins/dsh-imouto-codex/auth/login";
+const LOGOUT_PATH = "/plugins/dsh-imouto-codex/auth/logout";
+const IMAGE_TOOLS_PATH = "/plugins/dsh-imouto-codex/image-tools";
+const RESPONSE_API_PATH = "/plugins/dsh-imouto-codex/response-api";
+const MODEL_CATALOG_PATH = "/plugins/dsh-imouto-codex/models";
+const CONTEXT_WINDOW_PATH = "/plugins/dsh-imouto-codex/context-window";
+const FAST_MODE_SETTINGS_PATH = "/plugins/dsh-imouto-codex/fast-mode-default";
 const MODEL_FALLBACK_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/model-fallback";
-const PROXY_PATH = "/plugins/dsh-openai-codex/proxy";
+  "/plugins/dsh-imouto-codex/model-fallback";
+const PROXY_PATH = "/plugins/dsh-imouto-codex/proxy";
 const POLL_INTERVAL_MS = 1_000;
 const USAGE_POLL_INTERVAL_MS = 60_000;
 

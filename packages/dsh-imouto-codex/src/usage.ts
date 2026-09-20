@@ -303,7 +303,7 @@ export async function readOpenAICodexRateLimits(
       'chatgpt-account-id': accountId,
       accept: 'application/json',
       'cache-control': 'no-store',
-      'user-agent': 'dsh-openai-codex',
+      'user-agent': 'dsh-imouto-codex',
     },
     signal: AbortSignal.timeout(USAGE_REQUEST_TIMEOUT_MS),
   })

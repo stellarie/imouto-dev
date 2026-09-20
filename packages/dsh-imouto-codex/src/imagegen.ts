@@ -386,7 +386,7 @@ export function imagegenTool(
       if (exec.parent !== undefined) {
         exec.deferContext(createUserMessage({
           content: contentOf(value),
-          source: { kind: 'plugin', plugin: 'dsh-openai-codex' },
+          source: { kind: 'plugin', plugin: 'dsh-imouto-codex' },
         }))
       }
       return value
