@@ -26,9 +26,13 @@ GPT through openai-codex
   -> Yuu review and blackboard updates
 ```
 
-Codex is the parent model in this flow. It is not a replacement worker.
+Codex can remain the parent model in this flow. It is not a replacement worker.
 The supported worker path remains `imouto-driver`. Native dsh subagent tools
 are not the supported imouto path.
+
+For a DeepSeek-only flow, select a DeepSeek model in the GUI and invoke
+`/deepseek-only-dev`. The Lead owns architecture and integration. Native Agent
+Teams inherit the selected route; imouto-driver workers use `deepseek-flash`.
 
 The blackboard at `C:\Users\Stella\notes\blackboard` is the durable task
 record. Native messages only wake participants and announce completed evidence.
@@ -42,6 +46,7 @@ record. Native messages only wake participants and announce completed evidence.
 - [`protocol.md`](canon/protocol.md) defines blackboard tasks, work items, state changes, and coordination.
 - [`subimouto-dev.md`](canon/subimouto-dev.md) defines DeepSeek imouto delegation, review, and completion.
 - [`imouto-agent-team.md`](canon/imouto-agent-team.md) defines native Agent Teams development with blackboard coordination.
+- [`deepseek-only-dev.md`](canon/deepseek-only-dev.md) defines DeepSeek-only architecture and development flows.
 - [`imouto-plan.md`](canon/imouto-plan.md) defines Claude's planning workflow.
 - [`imouto-dispatch.md`](canon/imouto-dispatch.md) defines Claude's legacy Codex dispatch workflow.
 - [`standards/`](canon/standards/) contains shared completion and branch rules.
