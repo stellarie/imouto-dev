@@ -8,5 +8,8 @@ export default defineConfig({
       "@deepseek-ai/dsh-util-values": path.resolve(import.meta.dirname, "../deepseek-harness/packages/util/values/src/index.ts"),
     },
   },
-  test: { testTimeout: 15_000 },
+  test: {
+    include: ["scripts/**/*.test.ts", "tools/**/*.test.ts"],
+    testTimeout: 15_000,
+  },
 });

@@ -26,9 +26,14 @@ function staticSmoke() {
   assert("harness revision", revision.stdout.trim() === "ddefc45fbc7f8e46dd73185e68295696d1297887");
   let result = run(["--profile", "imouto-smoke", "--from-default-profile", "web", "--dump-config"]);
   assert("scratch web profile", result.status === 0, result.error?.message ?? result.stderr);
-  for (const bundle of ["dsh-imouto-dev-process", "dsh-imouto-dev"]) {
-    result = run(["plugin", "--profile", "imouto-smoke", "add", path.join(staged, bundle)]);
-    assert(`install ${bundle}`, result.status === 0, result.stderr);
+  const bundles = [
+    path.join(staged, "dsh-imouto-dev-process"),
+    path.join(staged, "dsh-imouto-dev"),
+    path.join(repo, "packages/dsh-imouto-codex"),
+  ];
+  for (const bundle of bundles) {
+    result = run(["plugin", "--profile", "imouto-smoke", "add", bundle]);
+    assert(`install ${path.basename(bundle)}`, result.status === 0, result.stderr);
   }
   result = run(["--profile", "imouto-smoke", "--dump-config"]);
   assert("dump config", result.status === 0, result.stderr);
@@ -36,6 +41,8 @@ function staticSmoke() {
   assert("blackboard plugin row", result.stdout.includes("id: imouto-blackboard"));
   assert("imouto skill row", result.stdout.includes("id: imouto-skill-filesystem"));
   assert("agent preset row", result.stdout.includes("id: agent-presets") && result.stdout.includes("dsh-imouto-dev/package.json"));
+  assert("Codex provider row", result.stdout.includes("id: llm-openai-codex") && result.stdout.includes("dsh-imouto-codex"));
+  assert("Yuu Codex model", result.stdout.includes("provider: openai-codex") && result.stdout.includes("model: gpt-5.6-sol"));
 }
 
 function liveSmoke() {

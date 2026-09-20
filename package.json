@@ -8,11 +8,11 @@
     "node": ">=24"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
-    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json && corepack pnpm --filter dsh-imouto-codex typecheck",
+    "test": "vitest run && corepack pnpm --filter dsh-imouto-codex test",
     "build:dsh": "tsx scripts/build-dsh.ts",
     "generate": "tsx scripts/generate.ts",
-    "check": "tsx scripts/generate.ts --check",
+    "check": "tsx scripts/generate.ts --check && corepack pnpm --filter dsh-imouto-codex build",
     "check:live": "tsx scripts/check-live.ts",
     "install-outputs": "tsx scripts/install.ts",
     "bb": "tsx tools/blackboard/cli.ts"
