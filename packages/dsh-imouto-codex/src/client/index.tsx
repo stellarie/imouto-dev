@@ -39,7 +39,7 @@ export const inject = ['slots', 'locale', 'sessions', 'remote', 'remote.session'
 /** Register account copy and the OpenAI Codex settings page. */
 export function apply(ctx: ClientContext): void {
   const namespace = 'settings.openai-codex'
-  ctx.effect(() => ctx.locale.register(namespace, { zh, en }), 'dsh-openai-codex: settings copy')
+  ctx.effect(() => ctx.locale.register(namespace, { zh, en }), 'dsh-imouto-codex: settings copy')
   const t = ctx.locale.bind(namespace) as OpenAICodexSettingsInjected['t']
   const imageUrls = new Map<string, Promise<string>>()
   const createdUrls = new Set<string>()
@@ -66,7 +66,7 @@ export function apply(ctx: ClientContext): void {
     for (const url of createdUrls) URL.revokeObjectURL(url)
     createdUrls.clear()
     imageUrls.clear()
-  }, 'dsh-openai-codex: release image URLs')
+  }, 'dsh-imouto-codex: release image URLs')
   ctx.slots.inject('settings.section', () => ctx.slots.register({
     name: 'settings.section',
     id: 'openai-codex',

@@ -31,8 +31,8 @@ function accessToken(accountId: string): string {
 }
 
 beforeEach(async () => {
-  workspace = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-imagegen-'))
-  dshHome = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-imagegen-home-'))
+  workspace = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-imagegen-'))
+  dshHome = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-imagegen-home-'))
   vi.stubEnv('DSH_HOME', dshHome)
   const store = new OpenAICodex.OpenAICodexCredentialStore()
   await store.modify(OpenAICodex.OPENAI_CODEX_PROVIDER, () => Promise.resolve({

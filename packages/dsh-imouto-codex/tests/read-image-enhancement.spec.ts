@@ -24,8 +24,8 @@ let callCounter = 0
 let delegatedPaths: string[]
 
 beforeEach(async () => {
-  workspace = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-read-image-'))
-  dshHome = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-read-image-home-'))
+  workspace = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-read-image-'))
+  dshHome = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-read-image-home-'))
   delegatedPaths = []
 })
 

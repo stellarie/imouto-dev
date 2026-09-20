@@ -1,4 +1,4 @@
-import { a as DEFAULT_OPENAI_CODEX_SEARCH_MODE, g as openaiCodexProvider, h as openAICodexAuthPath, i as DEFAULT_OPENAI_CODEX_SEARCH_MAX_OUTPUT_TOKENS, m as OpenAICodexCredentialStore, n as installOpenAICodexSearchEvent, o as DEFAULT_OPENAI_CODEX_SEARCH_MODEL, p as OPENAI_CODEX_PROVIDER, r as DEFAULT_OPENAI_CODEX_SEARCH_CONTEXT_SIZE, s as OPENAI_CODEX_BASE_URL, u as OpenAICodexSearchProvider } from "./search-event-DkmsZTXh.js";
+import { a as DEFAULT_OPENAI_CODEX_SEARCH_MODE, g as openaiCodexProvider, h as openAICodexAuthPath, i as DEFAULT_OPENAI_CODEX_SEARCH_MAX_OUTPUT_TOKENS, m as OpenAICodexCredentialStore, n as installOpenAICodexSearchEvent, o as DEFAULT_OPENAI_CODEX_SEARCH_MODEL, p as OPENAI_CODEX_PROVIDER, r as DEFAULT_OPENAI_CODEX_SEARCH_CONTEXT_SIZE, s as OPENAI_CODEX_BASE_URL, u as OpenAICodexSearchProvider } from "./search-event-D2bcmtae.js";
 import { randomUUID } from "node:crypto";
 import z from "@deepseek-ai/schemastery";
 import { createAssistantMessageEventStream, createModels } from "@earendil-works/pi-ai";
@@ -784,7 +784,7 @@ const OPENAI_CODEX_RETRY_POLICY = resolveRetryPolicy({
 		maxDelayMs: 3e4,
 		jitterRatio: .2
 	}
-}, "dsh-openai-codex retryPolicy");
+}, "dsh-imouto-codex retryPolicy");
 /**
 * Give the generic dsh adapter a request-scoped bearer-token entry without
 * changing the provider's user-facing OAuth flow. The resolver accepts only
@@ -1167,7 +1167,7 @@ async function readOpenAICodexRateLimits(store, requestFetch = globalThis.fetch)
 			"chatgpt-account-id": accountId,
 			accept: "application/json",
 			"cache-control": "no-store",
-			"user-agent": "dsh-openai-codex"
+			"user-agent": "dsh-imouto-codex"
 		},
 		signal: AbortSignal.timeout(USAGE_REQUEST_TIMEOUT_MS)
 	});
@@ -1187,11 +1187,11 @@ async function readOpenAICodexRateLimits(store, requestFetch = globalThis.fetch)
 //#region src/auth-paths.ts
 /** Node-free route constants shared by the Host and browser plugin halves. */
 /** Plugin-owned status endpoint consumed by its browser half. */
-const OPENAI_CODEX_AUTH_STATUS_PATH = "/plugins/dsh-openai-codex/auth/status";
+const OPENAI_CODEX_AUTH_STATUS_PATH = "/plugins/dsh-imouto-codex/auth/status";
 /** Plugin-owned browser-login endpoint consumed by its browser half. */
-const OPENAI_CODEX_AUTH_LOGIN_PATH = "/plugins/dsh-openai-codex/auth/login";
+const OPENAI_CODEX_AUTH_LOGIN_PATH = "/plugins/dsh-imouto-codex/auth/login";
 /** Plugin-owned logout endpoint consumed by its browser half. */
-const OPENAI_CODEX_AUTH_LOGOUT_PATH = "/plugins/dsh-openai-codex/auth/logout";
+const OPENAI_CODEX_AUTH_LOGOUT_PATH = "/plugins/dsh-imouto-codex/auth/logout";
 //#endregion
 //#region src/trusted-origins.ts
 /** Owner-only allowlist for browser origins that may reach the Web OAuth routes. */
@@ -1434,23 +1434,23 @@ var FastModeRegistry = class {
 //#region src/fast-mode-paths.ts
 /** Node-free Fast Mode route constants shared by Host and browser halves. */
 /** GET/POST endpoint for one conversation's process-local Fast Mode state. */
-const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-openai-codex/fast-mode";
+const OPENAI_CODEX_FAST_MODE_PATH = "/plugins/dsh-imouto-codex/fast-mode";
 //#endregion
 //#region src/auth-routes.ts
 /** Plugin-owned image-tool preference endpoint consumed by its browser half. */
-const OPENAI_CODEX_IMAGE_TOOL_SETTINGS_PATH = "/plugins/dsh-openai-codex/image-tools";
+const OPENAI_CODEX_IMAGE_TOOL_SETTINGS_PATH = "/plugins/dsh-imouto-codex/image-tools";
 /** Plugin-owned Responses API experiment endpoint consumed by its browser half. */
-const OPENAI_CODEX_RESPONSE_API_SETTINGS_PATH = "/plugins/dsh-openai-codex/response-api";
+const OPENAI_CODEX_RESPONSE_API_SETTINGS_PATH = "/plugins/dsh-imouto-codex/response-api";
 /** Plugin-owned model discovery preference endpoint consumed by its browser half. */
-const OPENAI_CODEX_MODEL_CATALOG_SETTINGS_PATH = "/plugins/dsh-openai-codex/models";
+const OPENAI_CODEX_MODEL_CATALOG_SETTINGS_PATH = "/plugins/dsh-imouto-codex/models";
 /** Plugin-owned client-side context capacity endpoint consumed by its browser half. */
-const OPENAI_CODEX_CONTEXT_WINDOW_SETTINGS_PATH = "/plugins/dsh-openai-codex/context-window";
+const OPENAI_CODEX_CONTEXT_WINDOW_SETTINGS_PATH = "/plugins/dsh-imouto-codex/context-window";
 /** Plugin-owned Fast Mode default endpoint consumed by its browser half. */
-const OPENAI_CODEX_FAST_MODE_SETTINGS_PATH = "/plugins/dsh-openai-codex/fast-mode-default";
+const OPENAI_CODEX_FAST_MODE_SETTINGS_PATH = "/plugins/dsh-imouto-codex/fast-mode-default";
 /** Plugin-owned backend model fallback endpoint consumed by its browser half. */
-const OPENAI_CODEX_MODEL_FALLBACK_SETTINGS_PATH = "/plugins/dsh-openai-codex/model-fallback";
+const OPENAI_CODEX_MODEL_FALLBACK_SETTINGS_PATH = "/plugins/dsh-imouto-codex/model-fallback";
 /** Plugin-owned proxy preference endpoint consumed by its browser half. */
-const OPENAI_CODEX_PROXY_SETTINGS_PATH = "/plugins/dsh-openai-codex/proxy";
+const OPENAI_CODEX_PROXY_SETTINGS_PATH = "/plugins/dsh-imouto-codex/proxy";
 /** Stable, non-sensitive error returned when a browser origin needs CLI trust. */
 const REMOTE_WEB_ORIGIN_NOT_TRUSTED = "remote-web-origin-not-trusted";
 /** Redact provider diagnostics before they cross to the browser. */
@@ -2039,7 +2039,7 @@ function registerOpenAICodexAuthRoutes(ctx, store, trustedOriginsOverride, fastM
 			for (const dispose of routes) dispose();
 			await auth.dispose();
 		};
-	}, "dsh-openai-codex: Web OAuth routes");
+	}, "dsh-imouto-codex: Web OAuth routes");
 }
 //#endregion
 //#region src/image-capability.ts
@@ -2393,7 +2393,7 @@ function enhancedReadImageTool(ctx, original, publicHttpRuntime) {
 				content: contentOf$1(value),
 				source: {
 					kind: "plugin",
-					plugin: "dsh-openai-codex"
+					plugin: "dsh-imouto-codex"
 				}
 			}));
 			return value;
@@ -2482,7 +2482,7 @@ function installReadImageEnhancement(ctx, policy, publicHttpRuntime) {
 		active = false;
 		stopPolicy();
 		for (const agent of [...installed.keys()]) remove(agent);
-	}, "dsh-openai-codex: enhanced read_image");
+	}, "dsh-imouto-codex: enhanced read_image");
 }
 //#endregion
 //#region src/binary-fs.ts
@@ -2919,7 +2919,7 @@ function imagegenTool(ctx, credentials, policy, requestFetch = globalThis.fetch)
 				content: contentOf(value),
 				source: {
 					kind: "plugin",
-					plugin: "dsh-openai-codex"
+					plugin: "dsh-imouto-codex"
 				}
 			}));
 			return value;
@@ -3492,7 +3492,7 @@ var ImageToolPolicy = class {
 		ctx.effect(() => () => {
 			unwatch();
 			if (this.scope === scope) this.scope = void 0;
-		}, "dsh-openai-codex: preferences");
+		}, "dsh-imouto-codex: preferences");
 	}
 	/** Return a detached settings projection for the browser. */
 	snapshot() {
@@ -3819,12 +3819,12 @@ function apply(ctx, config) {
 	ctx.provide("openAICodex", service);
 	ctx.effect(() => async () => {
 		await service.dispose();
-	}, "dsh-openai-codex: proxy transport");
+	}, "dsh-imouto-codex: proxy transport");
 	ctx.inject(["settings"], (settingsCtx) => {
 		service.attachSettings(settingsCtx);
 	});
 	ctx.llm.registerAdapter([OPENAI_CODEX_PROVIDER], createOpenAICodexAdapter(credentials, () => ctx.get("attachments"), () => imageTools.responseApiSnapshot(), fastMode, () => imageTools.modelCatalogSnapshot().models, () => imageTools.contextWindowSnapshot().contextWindow, () => imageTools.contextWindowSnapshot().overrideSparkContextWindow, service.proxy.fetch, () => imageTools.fastModeSnapshot().fastModeDefault, modelProvider));
-	ctx.effect(() => installOpenAICodexModelFallback(ctx, service), "dsh-openai-codex: backend model fallback");
+	ctx.effect(() => installOpenAICodexModelFallback(ctx, service), "dsh-imouto-codex: backend model fallback");
 	ctx.web.registerSearchProvider(new OpenAICodexSearchProvider({
 		credentials,
 		fetch: service.proxy.fetch,

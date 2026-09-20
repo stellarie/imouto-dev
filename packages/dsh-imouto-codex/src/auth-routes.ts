@@ -49,25 +49,25 @@ export { OPENAI_CODEX_FAST_MODE_PATH } from "./fast-mode-paths.ts";
 
 /** Plugin-owned image-tool preference endpoint consumed by its browser half. */
 export const OPENAI_CODEX_IMAGE_TOOL_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/image-tools";
+  "/plugins/dsh-imouto-codex/image-tools";
 /** Plugin-owned Responses API experiment endpoint consumed by its browser half. */
 export const OPENAI_CODEX_RESPONSE_API_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/response-api";
+  "/plugins/dsh-imouto-codex/response-api";
 /** Plugin-owned model discovery preference endpoint consumed by its browser half. */
 export const OPENAI_CODEX_MODEL_CATALOG_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/models";
+  "/plugins/dsh-imouto-codex/models";
 /** Plugin-owned client-side context capacity endpoint consumed by its browser half. */
 export const OPENAI_CODEX_CONTEXT_WINDOW_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/context-window";
+  "/plugins/dsh-imouto-codex/context-window";
 /** Plugin-owned Fast Mode default endpoint consumed by its browser half. */
 export const OPENAI_CODEX_FAST_MODE_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/fast-mode-default";
+  "/plugins/dsh-imouto-codex/fast-mode-default";
 /** Plugin-owned backend model fallback endpoint consumed by its browser half. */
 export const OPENAI_CODEX_MODEL_FALLBACK_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/model-fallback";
+  "/plugins/dsh-imouto-codex/model-fallback";
 /** Plugin-owned proxy preference endpoint consumed by its browser half. */
 export const OPENAI_CODEX_PROXY_SETTINGS_PATH =
-  "/plugins/dsh-openai-codex/proxy";
+  "/plugins/dsh-imouto-codex/proxy";
 
 /** Maximum time a browser request waits for the provider's authorization URL. */
 export const OPENAI_CODEX_AUTH_URL_TIMEOUT_MS = 30_000;
@@ -1071,5 +1071,5 @@ export function registerOpenAICodexAuthRoutes(
       for (const dispose of routes) dispose();
       await auth.dispose();
     };
-  }, "dsh-openai-codex: Web OAuth routes");
+  }, "dsh-imouto-codex: Web OAuth routes");
 }

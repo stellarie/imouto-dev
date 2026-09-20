@@ -22,7 +22,7 @@ afterEach(async () => {
 
 describe('OpenAI Codex real composition', () => {
   it('loads through the Loader, exposes the catalog, and unregisters on disposal', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
       '- id: llm',

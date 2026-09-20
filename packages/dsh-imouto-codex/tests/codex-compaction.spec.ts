@@ -105,7 +105,7 @@ function userMessage(text: string) {
 
 describe('OpenAI Codex compaction request', () => {
   it('keeps stateless reasoning and paired tool history without sending a standard output cap', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-compaction-'))
+    root = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-compaction-'))
     vi.stubEnv('DSH_HOME', root)
     const store = new OpenAICodex.OpenAICodexCredentialStore()
     await store.modify(OpenAICodex.OPENAI_CODEX_PROVIDER, () => Promise.resolve({
@@ -219,7 +219,7 @@ describe('OpenAI Codex compaction request', () => {
   })
 
   it('uses native compact output as a durable checkpoint and restores its response items', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-native-compact-'))
+    root = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-native-compact-'))
     vi.stubEnv('DSH_HOME', root)
     const store = new OpenAICodex.OpenAICodexCredentialStore()
     await store.modify(OpenAICodex.OPENAI_CODEX_PROVIDER, () => Promise.resolve({
@@ -322,7 +322,7 @@ describe('OpenAI Codex compaction request', () => {
   })
 
   it('falls back to Harness compaction when the native endpoint is unavailable', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-openai-codex-native-fallback-'))
+    root = await mkdtemp(join(tmpdir(), 'dsh-imouto-codex-native-fallback-'))
     vi.stubEnv('DSH_HOME', root)
     const store = new OpenAICodex.OpenAICodexCredentialStore()
     await store.modify(OpenAICodex.OPENAI_CODEX_PROVIDER, () => Promise.resolve({

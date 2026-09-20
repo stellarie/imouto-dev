@@ -147,7 +147,7 @@ export function enhancedReadImageTool(
       if (exec.parent !== undefined) {
         exec.deferContext(createUserMessage({
           content: contentOf(value),
-          source: { kind: 'plugin', plugin: 'dsh-openai-codex' },
+          source: { kind: 'plugin', plugin: 'dsh-imouto-codex' },
         }))
       }
       return value
@@ -251,5 +251,5 @@ export function installReadImageEnhancement(
     active = false
     stopPolicy()
     for (const agent of [...installed.keys()]) remove(agent)
-  }, 'dsh-openai-codex: enhanced read_image')
+  }, 'dsh-imouto-codex: enhanced read_image')
 }
