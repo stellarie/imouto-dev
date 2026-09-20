@@ -38,3 +38,6 @@ outputs:
   - from: canon/subimouto-dev.md
     to: dsh/dsh-imouto-dev/presets/yuu/skills/subimouto-dev/SKILL.md
     install: ''
+  - from: canon/imouto-agent-team.md
+    to: dsh/dsh-imouto-dev/presets/yuu/skills/imouto-agent-team/SKILL.md
+    install: ''
