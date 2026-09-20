@@ -11,6 +11,7 @@ const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "imouto-dsh-smoke-"));
 const home = path.join(temporary, "dsh-home");
 const state = path.join(temporary, "state");
 const staged = path.join(temporary, "bundles");
+const pinnedHarnessRevision = "ddefc45fbc7f8e46dd73185e68295696d1297887";
 fs.cpSync(path.join(repo, "dist/dsh"), staged, { recursive: true });
 
 function run(args: string[], env: NodeJS.ProcessEnv = process.env) {
@@ -23,7 +24,8 @@ function assert(label: string, condition: boolean, detail = "") {
 
 function staticSmoke() {
   const revision = spawnSync("git", ["rev-parse", "HEAD"], { cwd: harness, encoding: "utf8" });
-  assert("harness revision", revision.stdout.trim() === "ddefc45fbc7f8e46dd73185e68295696d1297887");
+  const runtimeDiff = spawnSync("git", ["diff", "--quiet", `${pinnedHarnessRevision}..HEAD`, "--", ".", ":(exclude)AGENTS.md"], { cwd: harness });
+  assert("harness runtime revision", revision.stdout.trim() === pinnedHarnessRevision || runtimeDiff.status === 0);
   let result = run(["--profile", "imouto-smoke", "--from-default-profile", "web", "--dump-config"]);
   assert("scratch web profile", result.status === 0, result.error?.message ?? result.stderr);
   const bundles = [
