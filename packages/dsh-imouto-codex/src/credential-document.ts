@@ -22,8 +22,8 @@ function claims(token: unknown): JsonObject {
 export function decodeCredentialDocument(text: string): CredentialDocument {
   let parsed: unknown
   try { parsed = JSON.parse(text.replace(/^\uFEFF/, '')) }
-  catch { throw new Error('openai-codex: credential file is not valid JSON') }
-  if (!object(parsed)) throw new Error('openai-codex: credential file must contain an object')
+  catch { throw new Error('dsh-imouto-codex: credential file is not valid JSON') }
+  if (!object(parsed)) throw new Error('dsh-imouto-codex: credential file must contain an object')
   const root = parsed
   const matches: { kind: string; key?: string; value: JsonObject }[] = []
   if (root.version === 1 && object(root.credential)) matches.push({ kind: 'dsh', key: 'credential', value: root.credential })
@@ -35,7 +35,7 @@ export function decodeCredentialDocument(text: string): CredentialDocument {
     const value = root[key]
     if (object(value) && value.type === 'oauth') matches.push({ kind: 'oauth', key, value })
   }
-  if (matches.length !== 1) throw new Error('openai-codex: unsupported or ambiguous credential JSON format')
+  if (matches.length !== 1) throw new Error('dsh-imouto-codex: unsupported or ambiguous credential JSON format')
   const match = matches[0]!
   const snake = match.kind === 'codex' || match.kind === 'cpa'
   const value = match.value
@@ -46,17 +46,17 @@ export function decodeCredentialDocument(text: string): CredentialDocument {
       : ['type', 'access', 'refresh', 'expires', 'accountId', 'idToken', 'email', 'enterpriseUrl']
   const rejectUnknown = (fields: JsonObject, names: readonly string[]) => {
     const unknown = Object.keys(fields).find(key => !names.includes(key))
-    if (unknown !== undefined) throw new Error(`openai-codex: unsupported credential field ${JSON.stringify(unknown)}`)
+    if (unknown !== undefined) throw new Error(`dsh-imouto-codex: unsupported credential field ${JSON.stringify(unknown)}`)
   }
   rejectUnknown(value, allowed)
   if (match.kind === 'codex') rejectUnknown(root, ['auth_mode', 'OPENAI_API_KEY', 'tokens', 'last_refresh'])
   if (match.kind === 'dsh') rejectUnknown(root, ['version', 'credential'])
   for (const key of ['id_token', 'idToken', 'email', 'enterpriseUrl', 'proxy_url', 'prefix', 'last_refresh', 'expired']) {
     if (key in value && typeof value[key] !== 'string')
-      throw new Error(`openai-codex: invalid credential field ${key}`)
+      throw new Error(`dsh-imouto-codex: invalid credential field ${key}`)
   }
-  if ('disabled' in value && typeof value.disabled !== 'boolean') throw new Error('openai-codex: invalid credential field disabled')
-  if (!snake && value.type !== 'oauth') throw new Error('openai-codex: credential type must be oauth')
+  if ('disabled' in value && typeof value.disabled !== 'boolean') throw new Error('dsh-imouto-codex: invalid credential field disabled')
+  if (!snake && value.type !== 'oauth') throw new Error('dsh-imouto-codex: credential type must be oauth')
   const access = value[snake ? 'access_token' : 'access']
   const refresh = value[snake ? 'refresh_token' : 'refresh']
   const jwt = claims(access)
@@ -67,11 +67,11 @@ export function decodeCredentialDocument(text: string): CredentialDocument {
     : match.kind === 'cpa' ? Date.parse(String(value.expired)) : value.expires
   let credential: OAuthCredential | undefined
   if (!(access === '' && refresh === '')) {
-    if (typeof access !== 'string' || !access) throw new Error('openai-codex: invalid credential access token')
-    if (typeof refresh !== 'string' || !refresh) throw new Error('openai-codex: invalid credential refresh token')
-    if (typeof accountId !== 'string' || !accountId) throw new Error('openai-codex: missing credential accountId')
+    if (typeof access !== 'string' || !access) throw new Error('dsh-imouto-codex: invalid credential access token')
+    if (typeof refresh !== 'string' || !refresh) throw new Error('dsh-imouto-codex: invalid credential refresh token')
+    if (typeof accountId !== 'string' || !accountId) throw new Error('dsh-imouto-codex: missing credential accountId')
     if (typeof expires !== 'number' || !Number.isFinite(expires) || expires < 0)
-      throw new Error('openai-codex: invalid credential expiry')
+      throw new Error('dsh-imouto-codex: invalid credential expiry')
     credential = { type: 'oauth', access, refresh, expires, accountId }
     const idToken = value[snake ? 'id_token' : 'idToken']
     if (typeof idToken === 'string' && idToken) credential.idToken = idToken
@@ -81,7 +81,7 @@ export function decodeCredentialDocument(text: string): CredentialDocument {
     credential,
     update(next) {
       if (next && credential && credential.idToken && !next.idToken && next.accountId !== credential.accountId)
-        throw new Error('openai-codex: account change requires a new ID token')
+        throw new Error('dsh-imouto-codex: account change requires a new ID token')
       const updated = { ...value }
       if (snake) {
         updated.access_token = next?.access ?? ''

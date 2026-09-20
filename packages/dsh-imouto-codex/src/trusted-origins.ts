@@ -34,13 +34,13 @@ async function assertOwnerOnly(filename: string): Promise<void> {
     if (isENOENT(error)) return
     throw error
   }
-  if (!metadata.isFile()) throw new Error(`openai-codex: ${filename} is not a regular file`)
+  if (!metadata.isFile()) throw new Error(`dsh-imouto-codex: ${filename} is not a regular file`)
   /* v8 ignore next -- native Windows coverage takes the mode-less branch */
   if (process.platform === 'win32') return
   /* v8 ignore start -- POSIX tests cover this branch; Windows cannot express it */
   if ((metadata.mode & 0o077) !== 0) {
     throw new Error(
-      `openai-codex: ${filename} is readable beyond its owner (mode ${(metadata.mode & 0o777).toString(8)});`
+      `dsh-imouto-codex: ${filename} is readable beyond its owner (mode ${(metadata.mode & 0o777).toString(8)});`
       + ` run "chmod 600 ${filename}" before starting again`,
     )
   }
@@ -53,30 +53,30 @@ function parseDocument(text: string, filename: string): TrustedOriginsDocument {
   try {
     value = JSON.parse(text)
   } catch {
-    throw new Error(`openai-codex: ${filename} is not valid JSON`)
+    throw new Error(`dsh-imouto-codex: ${filename} is not valid JSON`)
   }
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    throw new Error(`openai-codex: ${filename} must contain an object`)
+    throw new Error(`dsh-imouto-codex: ${filename} must contain an object`)
   }
   const document = value as Record<string, unknown>
   if (Object.keys(document).some(key => !['version', 'mode', 'origins'].includes(key))) {
-    throw new Error(`openai-codex: ${filename} contains an unknown top-level field`)
+    throw new Error(`dsh-imouto-codex: ${filename} contains an unknown top-level field`)
   }
   if (document['version'] !== TRUSTED_ORIGINS_FORMAT_VERSION) {
-    throw new Error(`openai-codex: ${filename} has unsupported trusted-origins format version ${String(document['version'])}`)
+    throw new Error(`dsh-imouto-codex: ${filename} has unsupported trusted-origins format version ${String(document['version'])}`)
   }
   if (document['mode'] !== TRUSTED_ORIGINS_MODE) {
-    throw new Error(`openai-codex: ${filename} has unsupported trusted-origins mode`)
+    throw new Error(`dsh-imouto-codex: ${filename} has unsupported trusted-origins mode`)
   }
   const rawOrigins = document['origins']
-  if (!Array.isArray(rawOrigins)) throw new Error(`openai-codex: ${filename} origins must be an array`)
+  if (!Array.isArray(rawOrigins)) throw new Error(`dsh-imouto-codex: ${filename} origins must be an array`)
   const origins = new Set<string>()
   for (const rawOrigin of rawOrigins) {
-    if (typeof rawOrigin !== 'string') throw new Error(`openai-codex: ${filename} origins must contain strings`)
+    if (typeof rawOrigin !== 'string') throw new Error(`dsh-imouto-codex: ${filename} origins must contain strings`)
     try {
       origins.add(normalizeTrustedOrigin(rawOrigin))
     } catch {
-      throw new Error(`openai-codex: ${filename} contains an invalid trusted origin`)
+      throw new Error(`dsh-imouto-codex: ${filename} contains an invalid trusted origin`)
     }
   }
   return {

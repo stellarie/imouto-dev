@@ -111,7 +111,7 @@ function accountIdFromToken(access: string): string {
     if (typeof accountId !== 'string' || accountId.length === 0) throw new Error('missing account id')
     return accountId
   } catch (error: unknown) {
-    throw new WebError('OpenAI Codex search credential has no usable account id; run "dsh openai-codex login" again', 'WEB_PROVIDER_CREDENTIAL_MISSING', { cause: error })
+    throw new WebError('OpenAI Codex search credential has no usable account id; run "dsh plugin --profile <profile> exec dsh-imouto-codex login" again', 'WEB_PROVIDER_CREDENTIAL_MISSING', { cause: error })
   }
 }
 
@@ -258,7 +258,7 @@ export class OpenAICodexSearchProvider implements WebSearchProvider {
     }
     const access = auth?.auth.apiKey
     if (access === undefined || access.length === 0) {
-      throw new WebError('OpenAI Codex search is signed out; run "dsh openai-codex login"', 'WEB_PROVIDER_CREDENTIAL_MISSING')
+      throw new WebError('OpenAI Codex search is signed out; run "dsh plugin --profile <profile> exec dsh-imouto-codex login"', 'WEB_PROVIDER_CREDENTIAL_MISSING')
     }
     const accountId = accountIdFromToken(access)
     throwIfSearchAborted(signal)
@@ -318,7 +318,7 @@ export class OpenAICodexSearchProvider implements WebSearchProvider {
         : `OpenAI Codex search failed (HTTP ${response.status}): ${detail}`
       throw new WebError(
         response.status === 401 || response.status === 403
-          ? `${message}; run "dsh openai-codex login" again`
+          ? `${message}; run "dsh plugin --profile <profile> exec dsh-imouto-codex login" again`
           : message,
         response.status === 401 || response.status === 403
           ? 'WEB_PROVIDER_CREDENTIAL_MISSING'

@@ -101,9 +101,9 @@ function decodeCredentialDocument(text) {
 	try {
 		parsed = JSON.parse(text.replace(/^\uFEFF/, ""));
 	} catch {
-		throw new Error("openai-codex: credential file is not valid JSON");
+		throw new Error("dsh-imouto-codex: credential file is not valid JSON");
 	}
-	if (!object(parsed)) throw new Error("openai-codex: credential file must contain an object");
+	if (!object(parsed)) throw new Error("dsh-imouto-codex: credential file must contain an object");
 	const root = parsed;
 	const matches = [];
 	if (root.version === 1 && object(root.credential)) matches.push({
@@ -132,7 +132,7 @@ function decodeCredentialDocument(text) {
 			value
 		});
 	}
-	if (matches.length !== 1) throw new Error("openai-codex: unsupported or ambiguous credential JSON format");
+	if (matches.length !== 1) throw new Error("dsh-imouto-codex: unsupported or ambiguous credential JSON format");
 	const match = matches[0];
 	const snake = match.kind === "codex" || match.kind === "cpa";
 	const value = match.value;
@@ -165,7 +165,7 @@ function decodeCredentialDocument(text) {
 	];
 	const rejectUnknown = (fields, names) => {
 		const unknown = Object.keys(fields).find((key) => !names.includes(key));
-		if (unknown !== void 0) throw new Error(`openai-codex: unsupported credential field ${JSON.stringify(unknown)}`);
+		if (unknown !== void 0) throw new Error(`dsh-imouto-codex: unsupported credential field ${JSON.stringify(unknown)}`);
 	};
 	rejectUnknown(value, allowed);
 	if (match.kind === "codex") rejectUnknown(root, [
@@ -184,9 +184,9 @@ function decodeCredentialDocument(text) {
 		"prefix",
 		"last_refresh",
 		"expired"
-	]) if (key in value && typeof value[key] !== "string") throw new Error(`openai-codex: invalid credential field ${key}`);
-	if ("disabled" in value && typeof value.disabled !== "boolean") throw new Error("openai-codex: invalid credential field disabled");
-	if (!snake && value.type !== "oauth") throw new Error("openai-codex: credential type must be oauth");
+	]) if (key in value && typeof value[key] !== "string") throw new Error(`dsh-imouto-codex: invalid credential field ${key}`);
+	if ("disabled" in value && typeof value.disabled !== "boolean") throw new Error("dsh-imouto-codex: invalid credential field disabled");
+	if (!snake && value.type !== "oauth") throw new Error("dsh-imouto-codex: credential type must be oauth");
 	const access = value[snake ? "access_token" : "access"];
 	const refresh = value[snake ? "refresh_token" : "refresh"];
 	const jwt = claims(access);
@@ -195,10 +195,10 @@ function decodeCredentialDocument(text) {
 	const expires = match.kind === "codex" ? typeof jwt.exp === "number" ? jwt.exp * 1e3 : NaN : match.kind === "cpa" ? Date.parse(String(value.expired)) : value.expires;
 	let credential;
 	if (!(access === "" && refresh === "")) {
-		if (typeof access !== "string" || !access) throw new Error("openai-codex: invalid credential access token");
-		if (typeof refresh !== "string" || !refresh) throw new Error("openai-codex: invalid credential refresh token");
-		if (typeof accountId !== "string" || !accountId) throw new Error("openai-codex: missing credential accountId");
-		if (typeof expires !== "number" || !Number.isFinite(expires) || expires < 0) throw new Error("openai-codex: invalid credential expiry");
+		if (typeof access !== "string" || !access) throw new Error("dsh-imouto-codex: invalid credential access token");
+		if (typeof refresh !== "string" || !refresh) throw new Error("dsh-imouto-codex: invalid credential refresh token");
+		if (typeof accountId !== "string" || !accountId) throw new Error("dsh-imouto-codex: missing credential accountId");
+		if (typeof expires !== "number" || !Number.isFinite(expires) || expires < 0) throw new Error("dsh-imouto-codex: invalid credential expiry");
 		credential = {
 			type: "oauth",
 			access,
@@ -213,7 +213,7 @@ function decodeCredentialDocument(text) {
 	return {
 		credential,
 		update(next) {
-			if (next && credential && credential.idToken && !next.idToken && next.accountId !== credential.accountId) throw new Error("openai-codex: account change requires a new ID token");
+			if (next && credential && credential.idToken && !next.idToken && next.accountId !== credential.accountId) throw new Error("dsh-imouto-codex: account change requires a new ID token");
 			const updated = { ...value };
 			if (snake) {
 				updated.access_token = next?.access ?? "";
@@ -286,7 +286,7 @@ async function assertOwnerOnly(filename) {
 	/* v8 ignore next -- native Windows coverage takes the mode-less branch */
 	if (process.platform === "win32") return;
 	/* v8 ignore start -- POSIX tests cover this branch; Windows cannot express it */
-	if ((mode & 63) !== 0) throw new Error(`openai-codex: ${filename} is readable beyond its owner (mode ${(mode & 511).toString(8)}); run "chmod 600 ${filename}" before starting again`);
+	if ((mode & 63) !== 0) throw new Error(`dsh-imouto-codex: ${filename} is readable beyond its owner (mode ${(mode & 511).toString(8)}); run "chmod 600 ${filename}" before starting again`);
 	/* v8 ignore stop */
 }
 /** Validate the strict JSON document without quoting token-bearing input. */
@@ -295,14 +295,14 @@ function parseDocument(text, filename) {
 	try {
 		value = JSON.parse(text);
 	} catch {
-		throw new Error(`openai-codex: ${filename} is not valid JSON`);
+		throw new Error(`dsh-imouto-codex: ${filename} is not valid JSON`);
 	}
-	if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`openai-codex: ${filename} must contain an object`);
+	if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`dsh-imouto-codex: ${filename} must contain an object`);
 	const document = value;
-	if (document["version"] !== AUTH_FORMAT_VERSION) throw new Error(`openai-codex: ${filename} has unsupported auth format version ${String(document["version"])}`);
-	if (Object.keys(document).some((key) => key !== "version" && key !== "credential")) throw new Error(`openai-codex: ${filename} contains an unknown top-level field`);
+	if (document["version"] !== AUTH_FORMAT_VERSION) throw new Error(`dsh-imouto-codex: ${filename} has unsupported auth format version ${String(document["version"])}`);
+	if (Object.keys(document).some((key) => key !== "version" && key !== "credential")) throw new Error(`dsh-imouto-codex: ${filename} contains an unknown top-level field`);
 	const raw = document["credential"];
-	if (typeof raw !== "object" || raw === null || Array.isArray(raw)) throw new Error(`openai-codex: ${filename} credential must be an object`);
+	if (typeof raw !== "object" || raw === null || Array.isArray(raw)) throw new Error(`dsh-imouto-codex: ${filename} credential must be an object`);
 	const credential = raw;
 	if (Object.keys(credential).some((key) => ![
 		"type",
@@ -312,15 +312,15 @@ function parseDocument(text, filename) {
 		"accountId",
 		"idToken",
 		"email"
-	].includes(key))) throw new Error(`openai-codex: ${filename} credential contains an unknown field`);
-	if (credential["type"] !== "oauth") throw new Error(`openai-codex: ${filename} credential type must be oauth`);
+	].includes(key))) throw new Error(`dsh-imouto-codex: ${filename} credential contains an unknown field`);
+	if (credential["type"] !== "oauth") throw new Error(`dsh-imouto-codex: ${filename} credential type must be oauth`);
 	for (const key of [
 		"access",
 		"refresh",
 		"accountId"
-	]) if (typeof credential[key] !== "string" || credential[key].length === 0) throw new Error(`openai-codex: ${filename} credential ${key} must be a non-empty string`);
-	if (typeof credential["expires"] !== "number" || !Number.isFinite(credential["expires"]) || credential["expires"] <= 0) throw new Error(`openai-codex: ${filename} credential expires must be a positive finite number`);
-	for (const key of ["idToken", "email"]) if (credential[key] !== void 0 && (typeof credential[key] !== "string" || !credential[key])) throw new Error(`openai-codex: invalid credential ${key}`);
+	]) if (typeof credential[key] !== "string" || credential[key].length === 0) throw new Error(`dsh-imouto-codex: ${filename} credential ${key} must be a non-empty string`);
+	if (typeof credential["expires"] !== "number" || !Number.isFinite(credential["expires"]) || credential["expires"] <= 0) throw new Error(`dsh-imouto-codex: ${filename} credential expires must be a positive finite number`);
+	for (const key of ["idToken", "email"]) if (credential[key] !== void 0 && (typeof credential[key] !== "string" || !credential[key])) throw new Error(`dsh-imouto-codex: invalid credential ${key}`);
 	return {
 		version: AUTH_FORMAT_VERSION,
 		credential
@@ -348,14 +348,14 @@ var OpenAICodexCredentialStore = class {
 	shared;
 	constructor(filename) {
 		this.shared = filename !== void 0;
-		if (filename !== void 0 && !isAbsolute(filename)) throw new Error("openai-codex: credentialFile must be an absolute path");
+		if (filename !== void 0 && !isAbsolute(filename)) throw new Error("dsh-imouto-codex: credentialFile must be an absolute path");
 		this.filename = resolve(filename ?? openAICodexAuthPath());
 	}
 	/** Read and validate the current document without acquiring the writer lock. */
 	async readCurrent() {
 		if (this.shared) try {
 			const info = await lstat(this.filename);
-			if (!info.isFile() || info.nlink !== 1) throw new Error("openai-codex: shared credential must be a single-link regular file");
+			if (!info.isFile() || info.nlink !== 1) throw new Error("dsh-imouto-codex: shared credential must be a single-link regular file");
 		} catch (error) {
 			if (!isENOENT(error)) throw error;
 		}
@@ -382,7 +382,7 @@ var OpenAICodexCredentialStore = class {
 	}
 	/** @inheritdoc */
 	async modify(providerId, fn) {
-		if (providerId !== "openai-codex") throw new Error(`openai-codex: credential store does not own provider "${providerId}"`);
+		if (providerId !== "openai-codex") throw new Error(`dsh-imouto-codex: credential store does not own provider "${providerId}"`);
 		await mkdir(dirname(this.filename), {
 			recursive: true,
 			mode: 448
@@ -400,12 +400,12 @@ var OpenAICodexCredentialStore = class {
 				await assertOwnerOnly(this.filename);
 				try {
 					const source = decodeCredentialDocument(await readFile(this.filename, "utf8"));
-					if (JSON.stringify(source.credential) !== JSON.stringify(current)) throw new Error("openai-codex: credential changed during update; reload before retrying");
+					if (JSON.stringify(source.credential) !== JSON.stringify(current)) throw new Error("dsh-imouto-codex: credential changed during update; reload before retrying");
 					output = source.update(document.credential);
 					decodeCredentialDocument(JSON.stringify(output));
 				} catch (error) {
 					if (!isENOENT(error)) throw error;
-					if (current !== void 0) throw new Error("openai-codex: credential file was removed during update");
+					if (current !== void 0) throw new Error("dsh-imouto-codex: credential file was removed during update");
 				}
 			}
 			await writeFileAtomic(this.filename, `${JSON.stringify(output, null, 2)}\n`, {
@@ -482,7 +482,7 @@ function accountIdFromToken(access) {
 		if (typeof accountId !== "string" || accountId.length === 0) throw new Error("missing account id");
 		return accountId;
 	} catch (error) {
-		throw new WebError("OpenAI Codex search credential has no usable account id; run \"dsh openai-codex login\" again", "WEB_PROVIDER_CREDENTIAL_MISSING", { cause: error });
+		throw new WebError("OpenAI Codex search credential has no usable account id; run \"dsh plugin --profile <profile> exec dsh-imouto-codex login\" again", "WEB_PROVIDER_CREDENTIAL_MISSING", { cause: error });
 	}
 }
 /** Whether an opaque value is a non-array record. */
@@ -603,7 +603,7 @@ var OpenAICodexSearchProvider = class {
 			throw new WebError("OpenAI Codex search credential resolution failed", "WEB_PROVIDER_ERROR", { cause: error });
 		}
 		const access = auth?.auth.apiKey;
-		if (access === void 0 || access.length === 0) throw new WebError("OpenAI Codex search is signed out; run \"dsh openai-codex login\"", "WEB_PROVIDER_CREDENTIAL_MISSING");
+		if (access === void 0 || access.length === 0) throw new WebError("OpenAI Codex search is signed out; run \"dsh plugin --profile <profile> exec dsh-imouto-codex login\"", "WEB_PROVIDER_CREDENTIAL_MISSING");
 		const accountId = accountIdFromToken(access);
 		throwIfSearchAborted(signal);
 		const body = {
@@ -661,7 +661,7 @@ var OpenAICodexSearchProvider = class {
 		if (!response.ok) {
 			const detail = providerMessage(payload);
 			const message = detail === void 0 ? `OpenAI Codex search failed (HTTP ${response.status})` : `OpenAI Codex search failed (HTTP ${response.status}): ${detail}`;
-			throw new WebError(response.status === 401 || response.status === 403 ? `${message}; run "dsh openai-codex login" again` : message, response.status === 401 || response.status === 403 ? "WEB_PROVIDER_CREDENTIAL_MISSING" : "WEB_PROVIDER_ERROR");
+			throw new WebError(response.status === 401 || response.status === 403 ? `${message}; run "dsh plugin --profile <profile> exec dsh-imouto-codex login" again` : message, response.status === 401 || response.status === 403 ? "WEB_PROVIDER_CREDENTIAL_MISSING" : "WEB_PROVIDER_ERROR");
 		}
 		return mapOpenAICodexSearchResponse(payload);
 	}
