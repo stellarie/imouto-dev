@@ -40,7 +40,8 @@ record. Native messages only wake participants and announce completed evidence.
 [`canon/`](canon/) contains the maintained workflow sources:
 
 - [`protocol.md`](canon/protocol.md) defines blackboard tasks, work items, state changes, and coordination.
-- [`subimouto-dev.md`](canon/subimouto-dev.md) defines execution modes, delegation, review, and completion.
+- [`subimouto-dev.md`](canon/subimouto-dev.md) defines DeepSeek imouto delegation, review, and completion.
+- [`imouto-agent-team.md`](canon/imouto-agent-team.md) defines native Agent Teams development with blackboard coordination.
 - [`imouto-plan.md`](canon/imouto-plan.md) defines Claude's planning workflow.
 - [`imouto-dispatch.md`](canon/imouto-dispatch.md) defines Claude's legacy Codex dispatch workflow.
 - [`standards/`](canon/standards/) contains shared completion and branch rules.
@@ -68,7 +69,7 @@ They define Yuu's persona, preset, agent composition, bundle patches, and skill 
 - `dist/claude/skills` contains `imouto-plan` and `imouto-dispatch`.
 - `dist/notes/PROTOCOL.md` is the generated blackboard protocol.
 - `dist/dsh/dsh-imouto-dev-process` provides blackboard tools and process skills.
-- `dist/dsh/dsh-imouto-dev` provides the Yuu preset and orchestration skill.
+- `dist/dsh/dsh-imouto-dev` provides the Yuu preset and orchestration skills.
 
 Do not edit these files directly. Run `corepack pnpm generate` after changing
 canon or host templates.
