@@ -4,16 +4,29 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.10.0",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "test": "vitest run",
+    "build:dsh": "tsx scripts/build-dsh.ts",
     "generate": "tsx scripts/generate.ts",
     "check": "tsx scripts/generate.ts --check",
     "check:live": "tsx scripts/check-live.ts",
     "install-outputs": "tsx scripts/install.ts",
     "bb": "tsx tools/blackboard/cli.ts"
   },
-  "dependencies": { "yaml": "^2.8.1" },
-  "devDependencies": { "@types/node": "^24", "tsx": "^4", "typescript": "^5.5", "vitest": "^2" }
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "link:../deepseek-harness/vendor/cordis",
+    "@deepseek-ai/dsh-tools": "link:../deepseek-harness/packages/core/tools",
+    "@types/node": "^24",
+    "esbuild": "^0.28.2",
+    "tsx": "^4",
+    "typescript": "^5.5",
+    "vitest": "^2"
+  }
 }

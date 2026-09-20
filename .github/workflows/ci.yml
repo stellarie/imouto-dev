@@ -11,12 +11,24 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: imouto-dev
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: imouto-dev
+      - uses: actions/checkout@v4
+        with:
+          repository: deepseek-ai/deepseek-harness
+          ref: ddefc45fbc7f8e46dd73185e68295696d1297887
+          path: deepseek-harness
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+        working-directory: deepseek-harness
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
