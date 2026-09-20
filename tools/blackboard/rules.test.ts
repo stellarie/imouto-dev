@@ -73,6 +73,14 @@ describe("frontmatter and sections", () => {
   }
 });
 
+describe("dsh protocol enums", () => {
+  it("accepts Yuu as initiator and owner with driver transport", () => {
+    const yuu = fixture().replace("initiator: Sherry", "initiator: Yuu").replace("coordination_transport: native", "coordination_transport: driver").replace("owner: Sherry", "owner: Yuu");
+    expect(rules(yuu)).toEqual([]);
+  });
+  it("accepts Yuu as Spawned by", () => expect(rules(fixture(completeBlock.replace("Spawned by: Sherry", "Spawned by: Yuu")))).toEqual([]));
+});
+
 describe("subimouto fixtures", () => {
   it("accepts None", () => expect(rules(fixture("None."))).toEqual([]));
   it("accepts one complete valid block", () => expect(rules(fixture(completeBlock))).toEqual([]));
@@ -84,7 +92,7 @@ describe("subimouto fixtures", () => {
     });
   }
   const enumCases: [string, string][] = [
-    ["- Spawned by: Sherry", "- Spawned by: Yuu"],
+    ["- Spawned by: Sherry", "- Spawned by: invalid"],
     ["- Role: implement", "- Role: invalid"],
     ["- Effort: max", "- Effort: normal"],
   ];

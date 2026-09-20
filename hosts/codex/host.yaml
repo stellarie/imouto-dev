@@ -1,5 +1,6 @@
 host: codex
-vars: {}
+vars:
+  parent: Sherry
 outputs:
   - from: canon/plugin.json
     to: codex/imouto-dev/.codex-plugin/plugin.json

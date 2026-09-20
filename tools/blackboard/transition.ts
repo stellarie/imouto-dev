@@ -1,6 +1,6 @@
 import { validate } from "./rules.js";
 export type Status = "planning"|"ready"|"implementing"|"review"|"verifying"|"done"|"blocked";
-export type Owner = "Chloe"|"Sherry"|"oniichan"|"none";
+export type Owner = "Chloe"|"Sherry"|"Yuu"|"oniichan"|"none";
 export interface TransitionInput { to: Status; owner: Owner; nextAction: string; verifier?: string; today: string }
 const edges: Record<Status, Status[]> = { planning:["ready","implementing","blocked"], ready:["implementing","blocked"], implementing:["review","blocked"], review:["implementing","verifying","done","blocked"], verifying:["implementing","done","blocked"], blocked:["planning","ready","implementing","review"], done:[] };
 export function transition(text: string, input: TransitionInput): string {
