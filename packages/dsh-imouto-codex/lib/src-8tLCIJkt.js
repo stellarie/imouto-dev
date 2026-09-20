@@ -1,4 +1,4 @@
-import { a as DEFAULT_OPENAI_CODEX_SEARCH_MODE, g as openaiCodexProvider, h as openAICodexAuthPath, i as DEFAULT_OPENAI_CODEX_SEARCH_MAX_OUTPUT_TOKENS, m as OpenAICodexCredentialStore, n as installOpenAICodexSearchEvent, o as DEFAULT_OPENAI_CODEX_SEARCH_MODEL, p as OPENAI_CODEX_PROVIDER, r as DEFAULT_OPENAI_CODEX_SEARCH_CONTEXT_SIZE, s as OPENAI_CODEX_BASE_URL, u as OpenAICodexSearchProvider } from "./search-event-D2bcmtae.js";
+import { a as DEFAULT_OPENAI_CODEX_SEARCH_MODE, g as openaiCodexProvider, h as openAICodexAuthPath, i as DEFAULT_OPENAI_CODEX_SEARCH_MAX_OUTPUT_TOKENS, m as OpenAICodexCredentialStore, n as installOpenAICodexSearchEvent, o as DEFAULT_OPENAI_CODEX_SEARCH_MODEL, p as OPENAI_CODEX_PROVIDER, r as DEFAULT_OPENAI_CODEX_SEARCH_CONTEXT_SIZE, s as OPENAI_CODEX_BASE_URL, u as OpenAICodexSearchProvider } from "./search-event-BBwbD_g-.js";
 import { randomUUID } from "node:crypto";
 import z from "@deepseek-ai/schemastery";
 import { createAssistantMessageEventStream, createModels } from "@earendil-works/pi-ai";
@@ -1212,11 +1212,11 @@ async function assertOwnerOnly(filename) {
 		if (isENOENT(error)) return;
 		throw error;
 	}
-	if (!metadata.isFile()) throw new Error(`openai-codex: ${filename} is not a regular file`);
+	if (!metadata.isFile()) throw new Error(`dsh-imouto-codex: ${filename} is not a regular file`);
 	/* v8 ignore next -- native Windows coverage takes the mode-less branch */
 	if (process.platform === "win32") return;
 	/* v8 ignore start -- POSIX tests cover this branch; Windows cannot express it */
-	if ((metadata.mode & 63) !== 0) throw new Error(`openai-codex: ${filename} is readable beyond its owner (mode ${(metadata.mode & 511).toString(8)}); run "chmod 600 ${filename}" before starting again`);
+	if ((metadata.mode & 63) !== 0) throw new Error(`dsh-imouto-codex: ${filename} is readable beyond its owner (mode ${(metadata.mode & 511).toString(8)}); run "chmod 600 ${filename}" before starting again`);
 	/* v8 ignore stop */
 }
 /** Reject malformed input without echoing its contents into an error. */
@@ -1225,26 +1225,26 @@ function parseDocument(text, filename) {
 	try {
 		value = JSON.parse(text);
 	} catch {
-		throw new Error(`openai-codex: ${filename} is not valid JSON`);
+		throw new Error(`dsh-imouto-codex: ${filename} is not valid JSON`);
 	}
-	if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`openai-codex: ${filename} must contain an object`);
+	if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error(`dsh-imouto-codex: ${filename} must contain an object`);
 	const document = value;
 	if (Object.keys(document).some((key) => ![
 		"version",
 		"mode",
 		"origins"
-	].includes(key))) throw new Error(`openai-codex: ${filename} contains an unknown top-level field`);
-	if (document["version"] !== 1) throw new Error(`openai-codex: ${filename} has unsupported trusted-origins format version ${String(document["version"])}`);
-	if (document["mode"] !== "allowlist") throw new Error(`openai-codex: ${filename} has unsupported trusted-origins mode`);
+	].includes(key))) throw new Error(`dsh-imouto-codex: ${filename} contains an unknown top-level field`);
+	if (document["version"] !== 1) throw new Error(`dsh-imouto-codex: ${filename} has unsupported trusted-origins format version ${String(document["version"])}`);
+	if (document["mode"] !== "allowlist") throw new Error(`dsh-imouto-codex: ${filename} has unsupported trusted-origins mode`);
 	const rawOrigins = document["origins"];
-	if (!Array.isArray(rawOrigins)) throw new Error(`openai-codex: ${filename} origins must be an array`);
+	if (!Array.isArray(rawOrigins)) throw new Error(`dsh-imouto-codex: ${filename} origins must be an array`);
 	const origins = /* @__PURE__ */ new Set();
 	for (const rawOrigin of rawOrigins) {
-		if (typeof rawOrigin !== "string") throw new Error(`openai-codex: ${filename} origins must contain strings`);
+		if (typeof rawOrigin !== "string") throw new Error(`dsh-imouto-codex: ${filename} origins must contain strings`);
 		try {
 			origins.add(normalizeTrustedOrigin(rawOrigin));
 		} catch {
-			throw new Error(`openai-codex: ${filename} contains an invalid trusted origin`);
+			throw new Error(`dsh-imouto-codex: ${filename} contains an invalid trusted origin`);
 		}
 	}
 	return {
@@ -2608,7 +2608,7 @@ function accountIdFromToken(access) {
 		if (typeof accountId !== "string" || accountId.length === 0) throw new Error("missing account id");
 		return accountId;
 	} catch (error) {
-		throw new Error("OpenAI Codex image credential has no usable account id; run \"dsh openai-codex login\" again", { cause: error });
+		throw new Error("OpenAI Codex image credential has no usable account id; run \"dsh plugin --profile <profile> exec dsh-imouto-codex login\" again", { cause: error });
 	}
 }
 function providerMessage(value) {
@@ -2653,7 +2653,7 @@ var OpenAICodexImageClient = class {
 	async generate(prompt, images, signal) {
 		throwIfAborted(signal);
 		const access = (await abortable(this.models.getAuth(OPENAI_CODEX_PROVIDER), signal))?.auth.apiKey;
-		if (access === void 0 || access.length === 0) throw new Error("OpenAI Codex image generation is signed out; run \"dsh openai-codex login\"");
+		if (access === void 0 || access.length === 0) throw new Error("OpenAI Codex image generation is signed out; run \"dsh plugin --profile <profile> exec dsh-imouto-codex login\"");
 		const endpoint = images.length === 0 ? OPENAI_CODEX_IMAGE_GENERATIONS_URL : OPENAI_CODEX_IMAGE_EDITS_URL;
 		const body = {
 			...images.length === 0 ? {} : { images: images.map((image_url) => ({ image_url })) },

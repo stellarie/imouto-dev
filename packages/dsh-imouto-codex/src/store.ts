@@ -54,7 +54,7 @@ async function assertOwnerOnly(filename: string): Promise<void> {
   /* v8 ignore start -- POSIX tests cover this branch; Windows cannot express it */
   if ((mode & 0o077) !== 0) {
     throw new Error(
-      `openai-codex: ${filename} is readable beyond its owner (mode ${(mode & 0o777).toString(8)});`
+      `dsh-imouto-codex: ${filename} is readable beyond its owner (mode ${(mode & 0o777).toString(8)});`
       + ` run "chmod 600 ${filename}" before starting again`,
     )
   }
@@ -67,38 +67,38 @@ function parseDocument(text: string, filename: string): AuthDocument {
   try {
     value = JSON.parse(text)
   } catch {
-    throw new Error(`openai-codex: ${filename} is not valid JSON`)
+    throw new Error(`dsh-imouto-codex: ${filename} is not valid JSON`)
   }
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    throw new Error(`openai-codex: ${filename} must contain an object`)
+    throw new Error(`dsh-imouto-codex: ${filename} must contain an object`)
   }
   const document = value as Record<string, unknown>
   if (document['version'] !== AUTH_FORMAT_VERSION) {
-    throw new Error(`openai-codex: ${filename} has unsupported auth format version ${String(document['version'])}`)
+    throw new Error(`dsh-imouto-codex: ${filename} has unsupported auth format version ${String(document['version'])}`)
   }
   if (Object.keys(document).some(key => key !== 'version' && key !== 'credential')) {
-    throw new Error(`openai-codex: ${filename} contains an unknown top-level field`)
+    throw new Error(`dsh-imouto-codex: ${filename} contains an unknown top-level field`)
   }
   const raw = document['credential']
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
-    throw new Error(`openai-codex: ${filename} credential must be an object`)
+    throw new Error(`dsh-imouto-codex: ${filename} credential must be an object`)
   }
   const credential = raw as Record<string, unknown>
   if (Object.keys(credential).some(key => !['type', 'access', 'refresh', 'expires', 'accountId', 'idToken', 'email'].includes(key))) {
-    throw new Error(`openai-codex: ${filename} credential contains an unknown field`)
+    throw new Error(`dsh-imouto-codex: ${filename} credential contains an unknown field`)
   }
-  if (credential['type'] !== 'oauth') throw new Error(`openai-codex: ${filename} credential type must be oauth`)
+  if (credential['type'] !== 'oauth') throw new Error(`dsh-imouto-codex: ${filename} credential type must be oauth`)
   for (const key of ['access', 'refresh', 'accountId'] as const) {
     if (typeof credential[key] !== 'string' || credential[key].length === 0) {
-      throw new Error(`openai-codex: ${filename} credential ${key} must be a non-empty string`)
+      throw new Error(`dsh-imouto-codex: ${filename} credential ${key} must be a non-empty string`)
     }
   }
   if (typeof credential['expires'] !== 'number' || !Number.isFinite(credential['expires']) || credential['expires'] <= 0) {
-    throw new Error(`openai-codex: ${filename} credential expires must be a positive finite number`)
+    throw new Error(`dsh-imouto-codex: ${filename} credential expires must be a positive finite number`)
   }
   for (const key of ['idToken', 'email']) {
     if (credential[key] !== undefined && (typeof credential[key] !== 'string' || !credential[key]))
-      throw new Error(`openai-codex: invalid credential ${key}`)
+      throw new Error(`dsh-imouto-codex: invalid credential ${key}`)
   }
   return { version: AUTH_FORMAT_VERSION, credential: credential as unknown as OAuthCredential }
 }
@@ -128,7 +128,7 @@ export class OpenAICodexCredentialStore implements CredentialStore {
   private readonly shared: boolean
   constructor(filename?: string) {
     this.shared = filename !== undefined
-    if (filename !== undefined && !isAbsolute(filename)) throw new Error('openai-codex: credentialFile must be an absolute path')
+    if (filename !== undefined && !isAbsolute(filename)) throw new Error('dsh-imouto-codex: credentialFile must be an absolute path')
     this.filename = resolve(filename ?? openAICodexAuthPath())
   }
 
@@ -138,7 +138,7 @@ export class OpenAICodexCredentialStore implements CredentialStore {
       try {
         const info = await lstat(this.filename)
         if (!info.isFile() || info.nlink !== 1)
-          throw new Error('openai-codex: shared credential must be a single-link regular file')
+          throw new Error('dsh-imouto-codex: shared credential must be a single-link regular file')
       } catch (error) { if (!isENOENT(error)) throw error }
     }
     await assertOwnerOnly(this.filename)
@@ -170,7 +170,7 @@ export class OpenAICodexCredentialStore implements CredentialStore {
     fn: (current: Credential | undefined) => Promise<Credential | undefined>,
   ): Promise<Credential | undefined> {
     if (providerId !== OPENAI_CODEX_PROVIDER) {
-      throw new Error(`openai-codex: credential store does not own provider "${providerId}"`)
+      throw new Error(`dsh-imouto-codex: credential store does not own provider "${providerId}"`)
     }
     await mkdir(dirname(this.filename), { recursive: true, mode: 0o700 })
     const coordinate = this.shared ? serialize : withFileLock
@@ -189,12 +189,12 @@ export class OpenAICodexCredentialStore implements CredentialStore {
         try {
           const source = decodeCredentialDocument(await readFile(this.filename, 'utf8'))
           if (JSON.stringify(source.credential) !== JSON.stringify(current))
-            throw new Error('openai-codex: credential changed during update; reload before retrying')
+            throw new Error('dsh-imouto-codex: credential changed during update; reload before retrying')
           output = source.update(document.credential)
           decodeCredentialDocument(JSON.stringify(output))
         } catch (error) {
           if (!isENOENT(error)) throw error
-          if (current !== undefined) throw new Error('openai-codex: credential file was removed during update')
+          if (current !== undefined) throw new Error('dsh-imouto-codex: credential file was removed during update')
         }
       }
       await writeFileAtomic(this.filename, `${JSON.stringify(output, null, 2)}\n`, {

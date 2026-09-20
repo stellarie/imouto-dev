@@ -75,7 +75,7 @@ function accountIdFromToken(access: string): string {
     if (typeof accountId !== 'string' || accountId.length === 0) throw new Error('missing account id')
     return accountId
   } catch (error: unknown) {
-    throw new Error('OpenAI Codex image credential has no usable account id; run "dsh openai-codex login" again', { cause: error })
+    throw new Error('OpenAI Codex image credential has no usable account id; run "dsh plugin --profile <profile> exec dsh-imouto-codex login" again', { cause: error })
   }
 }
 
@@ -139,7 +139,7 @@ export class OpenAICodexImageClient {
     const auth = await abortable(this.models.getAuth(OPENAI_CODEX_PROVIDER), signal)
     const access = auth?.auth.apiKey
     if (access === undefined || access.length === 0) {
-      throw new Error('OpenAI Codex image generation is signed out; run "dsh openai-codex login"')
+      throw new Error('OpenAI Codex image generation is signed out; run "dsh plugin --profile <profile> exec dsh-imouto-codex login"')
     }
     const endpoint = images.length === 0
       ? OPENAI_CODEX_IMAGE_GENERATIONS_URL
