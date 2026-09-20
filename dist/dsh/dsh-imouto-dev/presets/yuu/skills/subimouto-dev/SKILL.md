@@ -99,7 +99,7 @@ Then call `mcp__imouto__set_root` with the exact project path.
 Never use a broad common ancestor for multiple repositories. Complete one
 repository, tuck its workers, then change the root.
 
-Use `mcp__imouto__spawn` with `goal`, `brief`, `name`, `scope`, and `budget`.
+Use `mcp__imouto__spawn` with `goal`, `brief`, `name`, `effort`, `scope`, and `budget`.
 Every brief starts with this execution context:
 
 ```text
@@ -113,8 +113,9 @@ Forbidden actions: {exact actions}
 Give each worker a unique cute girl name and a headpat in the brief.
 The returned imouto id, such as `imo-3`, is the host identifier.
 
-The worker model is fixed as `deepseek-flash`. Record `Effort: high`.
-The driver sends `reasoning_effort: high`.
+The worker model is fixed as `deepseek-flash`. Supported effort values are
+`low`, `high`, and `max`. Use and record `max` by default. The driver keeps
+thinking mode enabled and sends the selected effort as `reasoning_effort`.
 
 Use `mcp__imouto__send` for follow-up instructions. Use `mcp__imouto__wait`
 with `timeoutSec` from 60 to 110 only when the next action needs a result.

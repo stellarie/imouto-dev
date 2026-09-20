@@ -9,7 +9,8 @@ it("changes protocol only through planned additions and four replacements", () =
   const additions = new Set([
     "Use `driver` for imouto-driver workers. Workers cannot write the blackboard.",
     "The parent writes each work file from the worker's mail, in the work-item schema.",
-    "imouto-driver workers use `deepseek-flash` with effort `high`.",
+    "imouto-driver workers use `deepseek-flash` with thinking enabled. Supported",
+    "effort values are `low`, `high`, and `max`. The default is `max`.",
     "",
   ]);
   const replacements = new Map([
