@@ -15,7 +15,8 @@ The repository maintains these components:
 
 The dedicated Yuu profile uses GPT for parent reasoning. Yuu delegates bounded
 implementation work through `imouto-driver`. The driver keeps workers on
-`deepseek-flash` with high reasoning effort.
+`deepseek-flash` with thinking enabled. Workers support `low`, `high`, and
+`max` effort. The default is `max`.
 
 ```text
 GPT through openai-codex

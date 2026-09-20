@@ -219,7 +219,8 @@ Skip inapplicable phases by recording `N/A` with one reason.
 
 ## Subimouto model policy
 
-imouto-driver workers use `deepseek-flash` with effort `high`.
+imouto-driver workers use `deepseek-flash` with thinking enabled. Supported
+effort values are `low`, `high`, and `max`. The default is `max`.
 
 - Use `gpt-5.6-luna` with effort `max` by default.
 - Use `gpt-5.6-sol` with effort `high` only for difficult reasoning.
