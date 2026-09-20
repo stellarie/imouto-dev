@@ -95,9 +95,21 @@ integration or repairs when they form a bounded task.
 ## Native dispatch
 
 Before the first spawn, call `mcp__imouto__health`. Confirm its `stateDir`.
-Then call `mcp__imouto__set_root` with the absolute project path.
+Then call `mcp__imouto__set_root` with the exact project path.
+Never use a broad common ancestor for multiple repositories. Complete one
+repository, tuck its workers, then change the root.
 
 Use `mcp__imouto__spawn` with `goal`, `brief`, `name`, `scope`, and `budget`.
+Every brief starts with this execution context:
+
+```text
+Repository root: {absolute project root}
+Tool scope: {absolute or root-relative scope}
+Shell: Read the platform line in your system prompt.
+Write paths: {exact allowed paths}
+Forbidden actions: {exact actions}
+```
+
 Give each worker a unique cute girl name and a headpat in the brief.
 The returned imouto id, such as `imo-3`, is the host identifier.
 
@@ -121,8 +133,9 @@ Every work item must define one measurable Goal and an ordered Required Steps
 list. Each step states its expected result and verification. Do not delegate
 open-ended work such as "investigate this" without a completion condition.
 
-Workers cannot write blackboard files. The parent writes each work file from
-the worker's mail and sets `coordination_transport: driver`.
+Workers cannot access blackboard files outside their scope. The parent writes
+each work file from worker mail and sets `coordination_transport: driver`.
+Do not instruct a driver worker to read or update a blackboard file.
 
 Yuu records task-level decisions in the main Thread. When a work file shows
 `needs-context` or `blocked`, Yuu may answer there. Then use
@@ -166,9 +179,9 @@ Need or result: {one sentence}
 Next action: {one sentence}
 ```
 
-Write complete evidence to the companion work file before sending `DONE` or
-`FINDINGS_READY`. The notification links the record; it does not repeat logs,
-diffs, commands, or long findings.
+Send concise evidence in the final mail before `DONE` or `FINDINGS_READY`.
+The parent writes that evidence to the companion work file.
+Do not repeat logs, diffs, commands, or long findings in notifications.
 
 The orchestrator is the default routing hub. For `NEEDS_FINDINGS`, she routes
 the request to the owning imouto with native messaging. Direct peer messaging
@@ -269,6 +282,10 @@ the parent supplied baseline evidence. The subimouto records that evidence.
 11. Check generated task and work files against `PROTOCOL.md` before handoff.
 12. Route review using `execution_mode`; use `initiator` only for legacy tasks.
 13. Complete the global development gate before claiming success.
+14. Drain relevant mail and record each final result.
+15. Promote or reject new memory candidates and skill drafts.
+16. Tuck each completed driver imouto and record residual uncertainty.
+17. Confirm no required worker or background command remains active.
 
 Higher-level requirements remain mandatory. If they require a review
 subimouto, summon one even when Yuu implemented the change locally.
@@ -277,13 +294,28 @@ Subimoutos must not spawn nested subimoutos. They must not modify files outside
 their assigned write sets. They must report changed files, tests, concerns,
 and a clear `DONE`, `DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, or `BLOCKED` result.
 
+## Concise worker reports
+
+Every worker final reply uses these headings:
+
+1. `Result`
+2. `Changed`
+3. `Checks`
+4. `Concerns`
+5. `Next`
+
+Each heading contains five bullets maximum. Omit empty detail, but keep every
+heading. Cite commands and results without narrating their execution. Do not
+repeat the diff, brief, or earlier progress. Put detailed evidence in the work
+file when the host permits it.
+
 ## Message requirements
 
 Every initial message must state:
 
 - A unique cute girl name and a headpat before the assigned work.
 - The main blackboard task path and assigned companion work file.
-- The project path and relevant context.
+- The repository root, tool scope, and shell source.
 - One concrete task and its acceptance criteria.
 - One measurable Goal that defines completion.
 - An ordered Required Steps list with expected results.
@@ -295,7 +327,7 @@ Every initial message must state:
 - A final requirement-by-requirement comparison.
 - The prohibition on nested delegation.
 - The required final summary, changed files, tests, and concerns.
-- The requirement to update the companion work file through the mini-SDLC.
+- The requirement to send phase conclusions for parent work-file updates.
 - The orchestrator contact route when the runtime exposes one.
 - Every allowed peer host ID and permitted topic, or `none`.
 - The event message shape and required notification events.

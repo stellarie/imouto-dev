@@ -224,8 +224,8 @@ Next action: {one sentence}
 ```
 
 Write complete evidence to the companion work file before sending `DONE` or
-`FINDINGS_READY`. The notification links the record; it does not repeat logs,
-diffs, commands, or long findings.
+`FINDINGS_READY`. The notification links the record.
+Do not repeat logs, diffs, commands, or long findings in notifications.
 
 The orchestrator is the default routing hub. For `NEEDS_FINDINGS`, she routes
 the request to the owning imouto with native messaging. Direct peer messaging
@@ -326,6 +326,10 @@ the parent supplied baseline evidence. The subimouto records that evidence.
 11. Check generated task and work files against `PROTOCOL.md` before handoff.
 12. Route review using `execution_mode`; use `initiator` only for legacy tasks.
 13. Complete the global development gate before claiming success.
+14. Drain relevant mail and record each final result.
+15. Promote or reject new memory candidates and skill drafts.
+16. Tuck each completed driver imouto and record residual uncertainty.
+17. Confirm no required worker or background command remains active.
 
 Higher-level requirements remain mandatory. If they require a review
 subimouto, summon one even when Sherry implemented the change locally.
@@ -334,13 +338,28 @@ Subimoutos must not spawn nested subimoutos. They must not modify files outside
 their assigned write sets. They must report changed files, tests, concerns,
 and a clear `DONE`, `DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, or `BLOCKED` result.
 
+## Concise worker reports
+
+Every worker final reply uses these headings:
+
+1. `Result`
+2. `Changed`
+3. `Checks`
+4. `Concerns`
+5. `Next`
+
+Each heading contains five bullets maximum. Omit empty detail, but keep every
+heading. Cite commands and results without narrating their execution. Do not
+repeat the diff, brief, or earlier progress. Put detailed evidence in the work
+file when the host permits it.
+
 ## Message requirements
 
 Every initial message must state:
 
 - A unique cute girl name and a headpat before the assigned work.
 - The main blackboard task path and assigned companion work file.
-- The project path and relevant context.
+- The repository root, tool scope, and shell source.
 - One concrete task and its acceptance criteria.
 - One measurable Goal that defines completion.
 - An ordered Required Steps list with expected results.
