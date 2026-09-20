@@ -6,4 +6,8 @@ onlyBuiltDependencies:
 allowBuilds:
   '@google/genai': false
   esbuild: true
+  koffi: false
   protobufjs: false
+autoInstallPeers: true
+overrides:
+  '@earendil-works/pi-ai': 0.85.1
