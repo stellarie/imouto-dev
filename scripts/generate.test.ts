@@ -7,6 +7,12 @@ import { checkGenerated, generateAll, render } from "./generate.js";
 const root = path.resolve(import.meta.dirname, "..");
 describe("render", () => {
   it("preserves plain files", () => expect(render("plain\n", "x", {}, "f")).toBe("plain\n"));
+  it("renders a block for every host it names", () => {
+    const source = "<!-- host:x,y -->\nboth\n<!-- /host -->\n";
+    expect(render(source, "x", {}, "f")).toBe("both\n");
+    expect(render(source, "y", {}, "f")).toBe("both\n");
+    expect(render(source, "z", {}, "f")).toBe("");
+  });
   it("renders variables and host blocks", () => expect(render("{{imouto:name}} {{model}}\n<!-- host:x -->\nyes\n<!-- /host -->\n<!-- host:y -->\nno\n<!-- /host -->\n", "x", { name: "Riko" }, "f")).toBe("Riko {{model}}\nyes\n"));
   it("rejects malformed input", () => {
     expect(() => render("{{imouto:no}}", "x", {}, "f")).toThrow(/no/);

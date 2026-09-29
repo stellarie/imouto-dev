@@ -27,7 +27,7 @@ export function render(source: string, host: string, vars: Record<string, string
       active = undefined;
       continue;
     }
-    if (!active || active === host) output += line;
+    if (!active || active.split(",").includes(host)) output += line;
   }
   if (active) throw new Error(`${file}:${lines.length}: unclosed host block`);
   return output.replace(/\{\{imouto:([^}]+)}}/g, (_all, name: string) => {

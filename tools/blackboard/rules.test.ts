@@ -84,6 +84,7 @@ describe("dsh protocol enums", () => {
 describe("subimouto fixtures", () => {
   it("accepts None", () => expect(rules(fixture("None."))).toEqual([]));
   it("accepts one complete valid block", () => expect(rules(fixture(completeBlock))).toEqual([]));
+  it("accepts unavailable effort", () => expect(rules(fixture(completeBlock.replace("- Effort: max", "- Effort: unavailable")))).toEqual([]));
   it("rejects an empty body", () => expect(rules(fixture(""))).toContain("subimouto-fields"));
   for (const field of ["Spawned by", "Role", "Model", "Effort", "Host ID", "Work file", "Task", "Outcome"]) {
     it(`rejects a block missing ${field}`, () => {

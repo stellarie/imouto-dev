@@ -51,6 +51,11 @@ Before dispatching, check:
    update `base_revision`.
 7. Every slug in `depends_on` is merged. If not, tell oniichan the
    merge order and stop.
+8. The validator passes:
+   `corepack pnpm --dir C:\Users\Stella\imouto-dev bb validate {absolute path}`.
+   A validator error is a plan defect. Fix it first. Then run
+   `python ~/tools/ste-check/ste_check.py --skip CONTRACTION {absolute path}`
+   and read every hit.
 
 If any check fails, tell oniichan what's missing. Do not dispatch.
 
@@ -78,6 +83,7 @@ Review the Plan section against the current codebase:
 - Are the function signatures and types accurate?
 - Are there existing patterns the plan should follow but doesn't?
 - Are there edge cases the plan misses?
+- Does the Plan hold a failure-mode list and a test strategy?
 - Is anything in the plan contradicted by the current code?
 
 Write your review in the Thread section as:
@@ -130,8 +136,28 @@ Commit your changes to a new branch: feat/{slug}.
 
 1. Read the git diff: `git diff main...feat/{slug}` (from the
    project directory).
-2. Read the blackboard file's Implementation Notes and Thread.
-3. Proceed to Phase 3.
+2. Diff every changed path against the Plan's target files. Include
+   uncommitted files from `git status --short`. Write scope is
+   advisory, so a worker can edit outside it. Ask the worker to list
+   any edit outside the repository.
+3. Read the blackboard file's Implementation Notes and Thread.
+4. Proceed to Phase 3.
+
+### Worker traps
+
+Apply these to Sherry and to every subimouto Chloe spawns. The root
+rule applies only to spawned subimoutos.
+
+- A transient worker failure is never a verified result. Allow one
+  bounded retry. Then redo the work, or report the item unverified.
+- A failed or discarded worker still gets a full Subimoutos block.
+  State what actually happened.
+- Count local work toward the same budget as delegated work.
+  Reserve capacity for the final checks.
+- Limit a spawned subimouto's writes to its write scope plus its work
+  file. Keep its root at the project directory so it can read and run
+  checks. Skip delegation when one file and one command finish the
+  task.
 
 ## Phase 3: Code Review (max 3 rounds)
 
@@ -159,6 +185,39 @@ Acceptance Test.
     `low`, `medium`, `high`, `xhigh`, `max`, `ultra`.
   - `Spawned by` naming the sub-agent instead of Sherry.
   - Outcome that just restates Task.
+
+### Adversarial checks
+
+Apply these to consequential behavior. Judge against the Acceptance
+Test. Treat Implementation Notes as claims, not evidence.
+
+- Derive each check from an acceptance criterion, not from the
+  implementation.
+- Probe the cases that apply: boundaries, malformed input, stale
+  state, permission failure, cancellation, concurrency, and recovery.
+- Run destructive probes only in an isolated worktree or disposable
+  environment.
+- Report each finding with a failing scenario, severity, and bounded
+  correction. If nothing fails, report a clean verdict with residuals.
+- The reviewer never repairs its own findings. Repaired work counts
+  as unreviewed until another pass checks it.
+- When two reviewers agree, ask whether one root error explains both.
+  Agreement is not independent evidence.
+
+### Bug-fix proof
+
+If the task fixes a bug, find a recorded fail-if-broken proof for
+each regression test. The proof has five steps:
+
+1. Undo the fix only, and keep the test.
+2. Run the one test by name. Expect it to fail on its own assertion,
+   not on a compile or import error.
+3. Restore the fix by hand, not from a stash.
+4. Run the same test again. Expect it to pass.
+5. Record both commands and both results.
+
+A missing proof is a finding. If the old behavior cannot be
+restored, the guard is unverified.
 
 ### If clean
 
@@ -200,7 +259,8 @@ Update Implementation Notes with what you changed.
 Set status to 'review' when done.
 ```
 
-4. On completion, re-review from the top of Phase 3.
+4. On completion, re-review from the top of Phase 3. Repaired work is
+   unreviewed until this pass checks it.
 
 ### Escalation
 

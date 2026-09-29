@@ -35,8 +35,10 @@ The skill is done when all of these hold:
 3. Every Acceptance Test item carries `[auto]`, `[manual]`, or
    `[review]`.
 4. `base_revision` names a real commit SHA.
-5. The Subimoutos section is filled, or says `None.`
-6. Oniichan has been told the next step.
+5. The Plan section holds a failure-mode list and a test strategy.
+   A bug plan also names its regression guard.
+6. The Subimoutos section is filled, or says `None.`
+7. Oniichan has been told the next step.
 
 Do not write code. Do not create a branch. Do not run
 `/imouto-dispatch`.
@@ -83,6 +85,22 @@ Language gates:
 Breadth work goes to a subimouto. Depth on load-bearing files stays
 with Chloe. Log every subimouto in Phase 5.
 
+## Phase 1b: Map failure modes
+
+List failures before writing the Acceptance Test or the Plan. Live
+`PROTOCOL.md` sets the record rules for the Plan section. This phase
+applies them.
+
+- List credible failures from design and code reading. Cover input,
+  state, dependency, permission, concurrency, resource, and recovery
+  paths where they apply.
+- Record four fields per consequential mode: trigger, effect, response,
+  and check. The check is a test, or an accepted residual risk with a
+  reason.
+- Do not claim the list is exhaustive. Revise it when new evidence
+  appears.
+- Write the list inside the Plan section. Add no new top-level section.
+
 ## Phase 2: Acceptance Test first
 
 Write the Acceptance Test before the Plan. The test defines scope.
@@ -101,6 +119,37 @@ Rules:
   new code reproduces the old values exactly, listed as a table.
 - Name the regression guard for any bug the plan fixes.
 
+Test strategy. Choose checks by observable impact. Follow the test
+rules in live `PROTOCOL.md`. Write the strategy inside the Plan
+section.
+
+- Choose the fewest checks that expose the consequential failure
+  modes. Set no test-count target.
+- Each automated test names the defect or invariant violation it would
+  catch.
+- Reject a test that only mirrors the implementation.
+- Assert what a consumer sees: output, downstream state, error and
+  recovery behavior. Assert exact strings only when the text is part
+  of the contract.
+- Vary the input where it carries risk. Use an integration or
+  end-to-end check when the risk crosses components or a user flow.
+- Per check, name the level, input, expected result, command or
+  environment, and owner. Mark each untested consequential risk.
+
+Bug fix. The plan names one regression guard by test path and name.
+The plan requires this fail-if-broken proof:
+
+1. The implementer writes the fix and the guard. Run the guard by
+   name. It passes.
+2. Undo the fix only. Keep the guard.
+3. Run the guard by name. It fails with its own assertion message.
+4. If the guard still passes, it does not cover the bug. Rewrite it.
+5. Restore the fix by hand, not from a stash. Run the guard again.
+   It passes.
+
+Implementation Notes record both runs. If the old behavior cannot be
+restored, mark the guard unverified.
+
 If no acceptance test can be stated, the problem is not framed. Stop
 and frame it with oniichan.
 
@@ -116,7 +165,8 @@ Use the schema in `~/CLAUDE.md`. Fill:
 - **Plan** — target files and what changes in each (create / modify /
   delete). Interface contracts: signatures, types, shapes. Data flow
   or control flow when non-obvious. Edge cases and the handling.
-  **Non-goals** — what not to touch.
+  **Failure modes** — from Phase 1b. **Test strategy** — from
+  Phase 2. Both stay inside Plan. **Non-goals** — what not to touch.
 - **Rollback** — only when the change is hard to undo. Data migration,
   published tag, config rewrite. Otherwise omit the section.
 - **Implementation Notes** — leave empty.
@@ -147,7 +197,13 @@ Run the checklist against the file and the code:
 7. Are the non-goals written down?
 8. What kills this plan first? Put that step first.
 9. Does the plan contradict anything in the current code?
-10. Is any instruction sentence over 20 words?
+10. Does every consequential failure mode have a response and a check,
+    or an accepted residual risk with a reason?
+11. Does each planned test name the defect it catches and assert a
+    consumer-visible outcome, not the implementation?
+12. For a bug fix, does the plan name a regression guard and require
+    the fail-if-broken proof?
+13. Is any instruction sentence over 20 words?
 
 For a plan of real size, dispatch one subimouto to run the same
 checklist independently. Give it the file and the project path. Do
@@ -161,11 +217,17 @@ Fix every valid finding before locking. A finding that survives into
 1. Add a block for every sub-agent spawned in Phase 1 or Phase 4.
    Fields: Spawned by, Phase, Model, Effort, Task, Outcome. Legal
    phases here are `plan`, `explore`, `plan-review`. Legal efforts are
-   `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra`.
+   `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra`, and
+   `unavailable` when the host sets no effort.
    Record failures and discarded work too. Write `None.` when no
    sub-agent ran.
 2. Set `updated` to today.
-3. Set status to `ready`. The plan is now locked. After this point,
+3. Validate the file with
+   `corepack pnpm --dir C:\Users\Stella\imouto-dev bb validate {absolute path}`.
+   Fix every error. Then run
+   `python ~/tools/ste-check/ste_check.py --skip CONTRACTION {absolute path}`.
+   Read every hit before you change a sentence.
+4. Set status to `ready`. The plan is now locked. After this point,
    never edit the Plan section silently. Add a Thread entry naming
    what changed and why.
 

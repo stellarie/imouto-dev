@@ -43,6 +43,7 @@ status: planning | ready | implementing | review | verifying | done | blocked
 owner: Chloe | Sherry | Yuu | oniichan | none
 next_action: {one concrete action or none}
 verifier: {name; required when status is verifying}
+artifact: {commit, branch, uncommitted {path}, or none}; required for done
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 project: {repository or project name}
@@ -59,7 +60,7 @@ depends_on: [{slug}, ...]
 {Tag each item with [auto], [manual], or [review].}
 
 ## Plan
-{Architecture, files, interfaces, edge cases, and non-goals.}
+{Architecture, files, interfaces, failure modes, test strategy, and non-goals.}
 
 ## Rollback
 {Include only when rollback needs more than restoring the previous files.}
@@ -99,6 +100,19 @@ depends_on: [{slug}, ...]
 Omit `depends_on` when no task dependency exists. Omit Rollback when the
 previous files provide sufficient recovery.
 
+Record failure modes and the test strategy inside Plan. Do not add new top-level task sections.
+List credible failures before implementation: trigger, effect, response, and verification or accepted residual risk.
+Select the few checks that expose consequential failures before setting `ready`.
+Name the test level, input, expected result, command or environment, and owner for each check.
+For each automated test, name the defect or invariant violation it would catch.
+Do not use tests that only mirror the implementation.
+Assert observable consequences, affected consumers, and downstream state across relevant input changes.
+Use integration or end-to-end checks when the risk crosses components or a critical user flow.
+Assert exact strings only when their precise text is part of the contract.
+One test may cover several risks. Do not set a test-count target.
+For complexity claims, use representative input scales, measurements, and source analysis. A timing test alone does not prove asymptotic behavior.
+Mark any consequential untested risk with a reason. Update the map when new evidence reveals another failure.
+
 ## Task ownership
 
 `owner` identifies who must perform `next_action`.
@@ -113,13 +127,14 @@ previous files provide sufficient recovery.
 - `verifying` belongs to oniichan or the named verifier.
 - `blocked` belongs to whoever can remove the recorded blocker.
 
-`verifying` requires `verifier`. `done` uses `owner: none` and
-`next_action: none`.
+`verifying` requires `verifier`. `done` uses `owner: none`,
+`next_action: none`, and a recorded `artifact`.
 
 Update `owner`, `next_action`, and `updated` with every task-level handoff.
 
-Solo and Auto assign technical review to Sherry. Delegated mode adds oniichan's
-milestone approvals. Chloe reviews only when oniichan assigns her.
+Solo and Auto assign technical review to the imouto that runs the task.
+Delegated mode adds oniichan's milestone approvals. Chloe reviews a Sherry-run
+task only when oniichan assigns her.
 
 Legacy tasks without `execution_mode` use `initiator` for review routing.
 Chloe reviews legacy Chloe-initiated tasks by default.
@@ -229,6 +244,7 @@ effort values are `low`, `high`, and `max`. The default is `max`.
 - Use `gpt-5.6-sol` with effort `high` only for difficult reasoning.
 - Never use `gpt-5.6-terra` or `gpt-6-astra` for subimoutos.
 - Keep the exact model ID and effort in separate fields.
+- Record effort `unavailable` when the spawn call cannot set or report effort, as with the Claude Agent tool.
 
 ## Role rules
 
@@ -247,6 +263,9 @@ narration for every command.
 Before each spawn, the parent publishes a user-facing dispatch declaration.
 It states the cute name, exact model, effort, role, task, Goal, and write scope.
 The declaration must precede the spawn tool call.
+
+The main task file must exist before the spawn. It carries the Objective,
+Acceptance Test, the work item Contract, and the write scope.
 
 The parent creates `host_id: pending` and `status: assigned`, then spawns.
 The parent sends the returned host ID without editing the active work file.
@@ -290,6 +309,11 @@ numbered round. A later round may explicitly supersede an earlier claim.
 `DONE` requires completed scope, listed changed files, successful required
 checks, and no undisclosed concerns.
 
+`done` requires a recorded artifact: a commit, a branch, or `uncommitted
+{path}`. Record `none` only when the task changes no repository file.
+
+A `[manual]` item passes only when a Review round records the run.
+
 Every development task includes these acceptance gates when applicable:
 
 - Build every affected buildable target.
@@ -317,6 +341,12 @@ different work file and a disjoint project write scope.
 Use at most two concurrent project writers. Reserve the third subimouto slot
 for review or repair. Nested delegation is prohibited.
 
+## Budget
+
+A worker that reaches zero remaining budget stops at the next phase boundary.
+It reports `BLOCKED` or `NEEDS_CONTEXT` with its spend. The parent grants more
+budget explicitly, or closes the work item.
+
 ## Provenance
 
 Add every completed, failed, discarded, or stopped subimouto to the main
@@ -329,6 +359,7 @@ Subimoutos section. The work file preserves detailed lifecycle evidence.
 - Keep instruction sentences within 20 words.
 - Keep descriptive sentences within 25 words.
 - Cite paths, lines, commands, and tests instead of narrating exploration.
+- Name the command that produced every count or status claim.
 - Never store credentials, tokens, personal data, or secrets.
 
 ## Branch naming

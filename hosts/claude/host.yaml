@@ -1,5 +1,6 @@
 host: claude
-vars: {}
+vars:
+  parent: Chloe
 outputs:
   - from: canon/imouto-plan.md
     to: claude/skills/imouto-plan/SKILL.md
@@ -7,3 +8,15 @@ outputs:
   - from: canon/imouto-dispatch.md
     to: claude/skills/imouto-dispatch/SKILL.md
     install: C:\Users\Stella\.claude\skills\imouto-dispatch\SKILL.md
+  - from: canon/subimouto-dev.md
+    to: claude/skills/subimouto-dev/SKILL.md
+    install: C:\Users\Stella\.claude\skills\subimouto-dev\SKILL.md
+  - from: canon/codebase-analysis.md
+    to: claude/skills/codebase-analysis/SKILL.md
+    install: C:\Users\Stella\.claude\skills\codebase-analysis\SKILL.md
+  - from: canon/skill-synthesis.md
+    to: claude/skills/skill-synthesis/SKILL.md
+    install: C:\Users\Stella\.claude\skills\skill-synthesis\SKILL.md
+  - from: canon/writing-ste100.md
+    to: claude/skills/writing-ste100/SKILL.md
+    install: C:\Users\Stella\.claude\skills\writing-ste100\SKILL.md

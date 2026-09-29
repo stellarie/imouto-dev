@@ -19,7 +19,7 @@ outputs:
     install: ''
     prepend: "{{imouto:blackboard_prepend}}\n\n"
     stripFrontmatter: true
-  - from: [canon/standards/completion-gate.md, canon/standards/branch-names.md]
+  - from: [canon/standards/never-push.md, canon/standards/comments.md, canon/standards/completion-gate.md, canon/standards/branch-names.md]
     to: dsh/dsh-imouto-dev-process/skills/imouto-standards/SKILL.md
     install: ''
     prepend: "{{imouto:standards_prepend}}\n\n"

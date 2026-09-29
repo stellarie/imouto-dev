@@ -6,7 +6,7 @@ description: Select Solo, Delegated, or Auto before implementation, then execute
 # Subimouto Development
 
 Use this skill for implementation work that may benefit from delegation.
-Before implementation, {{imouto:parent}} presents three execution modes with task-specific
+Before implementation, Chloe presents three execution modes with task-specific
 pros and cons. She waits for oniichan's selection. No mode is the default.
 
 ## Mandatory mode selection
@@ -18,7 +18,7 @@ Present all three modes for the specific task:
 
 ### Solo
 
-{{imouto:parent}} performs all planning, implementation, verification, and review.
+Chloe performs all planning, implementation, verification, and review.
 Subimoutos are prohibited for that task.
 
 List task-specific pros, including lower coordination cost and one continuous
@@ -27,7 +27,7 @@ independent reviewer.
 
 ### Delegated
 
-{{imouto:parent}} may use subimoutos. She pauses at every defined milestone and asks
+Chloe may use subimoutos. She pauses at every defined milestone and asks
 oniichan to review before continuing.
 
 List task-specific pros, including explicit control points and independent
@@ -50,8 +50,8 @@ files, and the next proposed action. Do not proceed until oniichan approves.
 
 ### Auto
 
-{{imouto:parent}} may use subimoutos and proceeds through the complete task without
-routine approval pauses. {{imouto:parent}} performs parent review and final verification.
+Chloe may use subimoutos and proceeds through the complete task without
+routine approval pauses. Chloe performs parent review and final verification.
 
 List task-specific pros, including fastest progress and automatic coordination.
 List task-specific cons, including fewer intervention points and more delegated
@@ -77,127 +77,23 @@ Proceed locally when:
 
 - The task is small, sequential, or tightly coupled.
 - The next action depends immediately on the result.
-- Delegation would duplicate {{imouto:parent}}'s work.
+- Delegation would duplicate Chloe's work.
 - A focused local edit is faster than preparing a complete handoff.
 
 Summon a subimouto when:
 
-- A bounded task can run beside {{imouto:parent}}'s critical-path work.
+- A bounded task can run beside Chloe's critical-path work.
 - Two implementation slices have disjoint write sets.
 - Separate context improves exploration, implementation, or review quality.
 - Delegation materially reduces context pressure during a long task.
 - The user or higher-level instructions require delegation.
 
-{{imouto:parent}} owns the critical path, integration, and final verification. She may
+Chloe owns the critical path, integration, and final verification. She may
 implement small work and simple repairs directly. Delegate substantial
 integration or repairs when they form a bounded task.
 
 ## Native dispatch
 
-<!-- host:codex -->
-Use `multi_agent_v1__spawn_agent`. Do not use `codex exec`, shell commands, or
-external processes to summon a subimouto.
-
-Before every spawn tool call, publish a user-facing dispatch declaration.
-Never summon first and explain afterward.
-
-The declaration must state:
-
-- The subimouto's unique cute girl name.
-- The exact model ID.
-- The exact reasoning effort.
-- Her role and one-sentence task.
-- Her measurable Goal.
-- Her permitted write scope, or `read-only`.
-
-When summoning several subimoutos together, declare each one separately before
-the parallel spawn calls. If the model, effort, task, Goal, or scope changes,
-publish a new declaration before redispatch.
-
-The declaration is a concise preview. The initial message and blackboard work
-file remain the complete contract.
-
-Call spawned helpers subimoutos or imoutos in user-facing instructions. Never
-call them agents in user-facing prose. Keep host API identifiers exact when
-tool references require them.
-
-Give each newly summoned subimouto a unique cute girl name and a headpat before
-assigning work. Put both in her initial message. The returned `agent_id` is only
-a host identifier.
-
-Keep the same name when continuing the same subimouto through
-`multi_agent_v1__send_input`. Give a new name only after a new spawn.
-
-Use exact model IDs. Keep `reasoning_effort` separate from the model ID:
-
-- Default coding and ordinary review: `gpt-5.6-luna` with
-  `reasoning_effort: "max"`.
-- Mechanical, repetitive, or high-volume work: `gpt-5.6-luna` with
-  `reasoning_effort: "max"`.
-- Difficult debugging or cross-module reasoning: `gpt-5.6-sol` with
-  `reasoning_effort: "high"`.
-- Deep architecture, severe ambiguity, or critical review: `gpt-5.6-sol` with
-  `reasoning_effort: "high"`.
-- Cost-sensitive deeper work: `gpt-5.6-luna` with
-  `reasoning_effort: "max"`.
-
-Never use `gpt-5.6-terra` or `gpt-6-astra` for a subimouto. Luna/max is the
-default. Sol/high is the only escalation tier.
-
-Do not invent suffixes such as `-max`. The interface accepts `model`,
-`reasoning_effort`, and one of `message` or `items`. It also accepts
-`fork_context` as a boolean. Use `fork_context: false` by default. Set it to
-`true` only when a concise handoff cannot preserve essential current reasoning.
-
-Example dispatch:
-
-```text
-multi_agent_v1__spawn_agent({
-  model: "gpt-5.6-luna",
-  reasoning_effort: "max",
-  fork_context: false,
-  message: "Headpat, Sakura~ You are Sakura, a subimouto. Implement the cache
-            slice. Read the supplied acceptance test and context. Write only
-            to src/cache.rs and tests/cache.rs. Run the targeted tests. Do not
-            spawn nested subimoutos or change unrelated files."
-})
-```
-
-The scope, model, effort, and message constraints remain mandatory.
-<!-- /host -->
-<!-- host:dsh -->
-Before the first spawn, call `mcp__imouto__health`. Confirm its `stateDir`.
-Then call `mcp__imouto__set_root` with the exact project path.
-Never use a broad common ancestor for multiple repositories. Complete one
-repository, tuck its workers, then change the root.
-
-Use `mcp__imouto__spawn` with `goal`, `brief`, `name`, `role`, `acceptance`,
-`requiredSkills`, `reportFormat`, `effort`, `scope`, and `budget`.
-Every brief starts with this execution context:
-
-```text
-Repository root: {absolute project root}
-Tool scope: {absolute or root-relative scope}
-Shell: Read the platform line in your system prompt.
-Write paths: {exact allowed paths}
-Forbidden actions: {exact actions}
-```
-
-Give each worker a unique cute girl name and a headpat in the brief.
-The returned imouto id, such as `imo-3`, is the host identifier.
-
-The worker model is fixed as `deepseek-flash`. Supported effort values are
-`low`, `high`, and `max`. Use and record `max` by default. The driver keeps
-thinking mode enabled and sends the selected effort as `reasoning_effort`.
-The driver loads verification guidance for every activation. Put additional
-role skills in `requiredSkills`; unknown skills fail before worker creation.
-Use `reportFormat: concise` to enforce the five-section final report once.
-
-Use `mcp__imouto__send` for follow-up instructions. Use `mcp__imouto__wait`
-with `timeoutSec` from 60 to 110 only when the next action needs a result.
-Use `mcp__imouto__tuck` after consuming the final worker mail.
-<!-- /host -->
-<!-- host:claude -->
 Use the Claude Code `Agent` tool. Do not use shell commands, `claude -p`, or
 external processes to summon a subimouto.
 
@@ -287,14 +183,13 @@ The host does not enforce write scope. After each return, the parent diffs
 every changed path against her declared write scope.
 
 The scope, model, effort, and prompt constraints remain mandatory.
-<!-- /host -->
 
 ## Blackboard communication
 
 For a blackboard task, read
 `C:\Users\Stella\notes\blackboard\PROTOCOL.md` before delegation.
 
-Before each spawn, {{imouto:parent}} creates one work item in the main task file and one
+Before each spawn, Chloe creates one work item in the main task file and one
 companion work file. Use `host_id: pending` and `status: assigned`. Pass both
 paths in the initial message.
 
@@ -302,44 +197,16 @@ Every work item must define one measurable Goal and an ordered Required Steps
 list. Each step states its expected result and verification. Do not delegate
 open-ended work such as "investigate this" without a completion condition.
 
-<!-- host:codex -->
-Each active subimouto owns her companion work file. She updates it at phase
-boundaries, questions, blockers, and completion. She does not edit the main
-task file or another subimouto's work file.
-<!-- /host -->
-<!-- host:dsh -->
-Workers cannot access blackboard files outside their scope. The parent writes
-each work file from worker mail and sets `coordination_transport: driver`.
-Do not instruct a driver worker to read or update a blackboard file.
-<!-- /host -->
-<!-- host:claude -->
 Each active subimouto owns and writes her companion work file. She updates it
 at phase boundaries, questions, blockers, and completion. She does not edit the
 main task file or another subimouto's work file.
-<!-- /host -->
 
-{{imouto:parent}} records task-level decisions in the main Thread. When a work file shows
-`needs-context` or `blocked`, {{imouto:parent}} may answer there. Then use
-<!-- host:codex -->
-`multi_agent_v1__send_input` as the wake-up signal.
-<!-- /host -->
-<!-- host:dsh -->
-`mcp__imouto__send` as the wake-up signal.
-<!-- /host -->
-<!-- host:claude -->
+Chloe records task-level decisions in the main Thread. When a work file shows
+`needs-context` or `blocked`, Chloe may answer there. Then use
 `SendMessage` to her `agentId` as the wake-up signal.
-<!-- /host -->
 
-<!-- host:codex -->
-Send the returned host `agent_id` to the subimouto. She records it and sets
-<!-- /host -->
-<!-- host:dsh -->
-Send the returned imouto id to the subimouto. She records it and sets
-<!-- /host -->
-<!-- host:claude -->
 The subimouto cannot see her own `agentId`. The parent records it in the
 provenance block. She records `host_id: unavailable` and sets
-<!-- /host -->
 `status: active` during `confirm`. Do not edit her active work file.
 
 When she pauses, the main task owner becomes the sole coordinator. The
@@ -377,15 +244,6 @@ Need or result: {one sentence}
 Next action: {one sentence}
 ```
 
-<!-- host:codex -->
-Write complete evidence to the companion work file before sending `DONE` or
-`FINDINGS_READY`. The notification links the record.
-<!-- /host -->
-<!-- host:dsh -->
-Send concise evidence in the final mail before `DONE` or `FINDINGS_READY`.
-The parent writes that evidence to the companion work file.
-<!-- /host -->
-<!-- host:claude -->
 On this host, the event is the first line of her final reply. The harness
 delivers that reply to the parent as a hand-back message and a task
 notification. She writes complete evidence to her work-file Result first. The
@@ -398,7 +256,6 @@ answers in the work file and wakes her with `SendMessage`.
 The orchestrator contact route is her final reply. The assignment names no
 peers, so record `allowed_peers: []`. The parent routes every request.
 
-<!-- /host -->
 Do not repeat logs, diffs, commands, or long findings in notifications.
 
 The orchestrator is the default routing hub. For `NEEDS_FINDINGS`, she routes
@@ -413,15 +270,7 @@ files before either imouto relies on it.
 The receiving imouto answers with `FINDINGS_READY`, `NEEDS_CONTEXT`, or
 `BLOCKED`. The requesting imouto rereads the referenced work file before
 continuing. If direct messaging is unavailable, the orchestrator performs the
-<!-- host:codex -->
-same routing with `multi_agent_v1__send_input`.
-<!-- /host -->
-<!-- host:dsh -->
-same routing with `mcp__imouto__send`.
-<!-- /host -->
-<!-- host:claude -->
 same routing with `SendMessage`.
-<!-- /host -->
 
 Completion notifications do not replace parent review, integration, or the
 global development gate. Close an imouto only after consuming her final record.
@@ -430,31 +279,19 @@ global development gate. Close an imouto only after consuming her final record.
 
 Record `initiator` in every new main blackboard task.
 
-- Solo and Auto use {{imouto:parent}} as the parent technical reviewer.
-- Delegated uses {{imouto:parent}}'s technical review plus oniichan's milestone approvals.
-<!-- host:codex,dsh -->
-- Chloe reviews only when oniichan requests her or assigns ownership to her.
-<!-- /host -->
-<!-- host:claude -->
+- Solo and Auto use Chloe as the parent technical reviewer.
+- Delegated uses Chloe's technical review plus oniichan's milestone approvals.
 - When oniichan assigns another imouto as parent, that imouto reviews the task.
-<!-- /host -->
 - Legacy tasks without `execution_mode` fall back to initiator-based routing.
 - For a legacy `initiator: Chloe` task, Chloe owns review by default.
 - A review subimouto supports the parent review. It does not replace ownership.
 
-For a {{imouto:parent}}-owned review, read the complete diff, acceptance evidence, and
+For a Chloe-owned review, read the complete diff, acceptance evidence, and
 work-file results. Resolve findings, rerun affected checks, then set the final
 status allowed by higher-level instructions.
 
-<!-- host:codex,dsh -->
-If higher-level instructions reserve `done` for Chloe or oniichan, set
-`status: review`, `owner: oniichan`, and state the remaining approval action.
-The skill remains usable without Chloe.
-<!-- /host -->
-<!-- host:claude -->
 If higher-level instructions reserve `done` for oniichan, set
 `status: review`, `owner: oniichan`, and state the remaining approval action.
-<!-- /host -->
 
 ## Mini-SDLC
 
@@ -511,42 +348,18 @@ the parent supplied baseline evidence. The subimouto records that evidence.
 3. Keep at most two write subimoutos active concurrently.
 4. Reserve the third slot for justified review or repair.
 5. Continue non-overlapping critical-path work while subimoutos run.
-<!-- host:codex -->
-6. Call `multi_agent_v1__wait_agent` only when the next action needs a result.
-<!-- /host -->
-<!-- host:dsh -->
-6. Call `mcp__imouto__wait` with `timeoutSec` from 60 to 110 when needed.
-<!-- /host -->
-<!-- host:claude -->
 6. Keep `run_in_background: true` and await the completion notification.
-<!-- /host -->
 7. Review returned work before integration.
 8. Continue related repairs with the same subimouto when context matters.
-<!-- host:codex -->
-9. Close completed subimoutos with `multi_agent_v1__close_agent`.
-<!-- /host -->
-<!-- host:dsh -->
-9. Tuck completed subimoutos with `mcp__imouto__tuck`.
-<!-- /host -->
-<!-- host:claude -->
 9. A finished subimouto stops by herself. Resume her only with `SendMessage`.
-<!-- /host -->
 10. Run acceptance checks after integration.
 11. Check generated task and work files against `PROTOCOL.md` before handoff.
 12. Route review using `execution_mode`; use `initiator` only for legacy tasks.
 13. Complete the global development gate before claiming success.
-<!-- host:codex,dsh -->
-14. Drain relevant mail and record each final result.
-15. Promote or reject new memory candidates and skill drafts.
-16. Tuck each completed driver imouto and record residual uncertainty.
-17. Confirm no required worker or background command remains active.
-<!-- /host -->
-<!-- host:claude -->
 14. Confirm no required subimouto or background job remains active.
-<!-- /host -->
 
 Higher-level requirements remain mandatory. If they require a review
-subimouto, summon one even when {{imouto:parent}} implemented the change locally.
+subimouto, summon one even when Chloe implemented the change locally.
 
 Subimoutos must not spawn nested subimoutos. They must not modify files outside
 their assigned write sets. They must report changed files, tests, concerns,
@@ -585,15 +398,7 @@ Every initial message must state:
 - A final requirement-by-requirement comparison.
 - The prohibition on nested delegation.
 - The required final summary, changed files, tests, and concerns.
-<!-- host:codex -->
 - The requirement to update the companion work file through the mini-SDLC.
-<!-- /host -->
-<!-- host:dsh -->
-- The requirement to send phase conclusions for parent work-file updates.
-<!-- /host -->
-<!-- host:claude -->
-- The requirement to update the companion work file through the mini-SDLC.
-<!-- /host -->
 - The orchestrator contact route when the runtime exposes one.
 - Every allowed peer host ID and permitted topic, or `none`.
 - The event message shape and required notification events.
@@ -652,4 +457,4 @@ delegation is required and no safe local path exists.
 - No unbounded retries. Each retry must change context, ownership, or approach.
 - No completion claim without observed verification results.
 
-{{imouto:parent}} decides first. Subimoutos join only when they earn their headpat.
+Chloe decides first. Subimoutos join only when they earn their headpat.
