@@ -35,7 +35,7 @@ export function validate(file: string, text: string): Finding[] | "legacy" {
       for (const field of fields) if (!(field in values)) out.push(finding("subimouto-fields","error",lineOf(text,block[0]),`missing ${field}`));
       if (values["Spawned by"] && !["Chloe","Sherry","Yuu"].includes(values["Spawned by"])) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Spawned by"));
       if (values.Role && !["explore","implement","review","repair","integrate"].includes(values.Role)) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Role"));
-      if (values.Effort && !["minimal","low","medium","high","xhigh","max","ultra"].includes(values.Effort)) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Effort"));
+      if (values.Effort && !["minimal","low","medium","high","xhigh","max","ultra","unavailable"].includes(values.Effort)) out.push(finding("subimouto-enum","error",lineOf(text,block[0]),"invalid Effort"));
       if (values.Model && (["gpt-5.6-terra","gpt-6-astra","subimouto"].includes(values.Model) || values.Model.endsWith("-max"))) out.push(finding("subimouto-model","error",lineOf(text,block[0]),"invalid Model"));
     }
   }

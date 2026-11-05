@@ -99,6 +99,9 @@ describe("subimouto fixtures", () => {
   for (const [from, to] of enumCases) {
     it(`rejects invalid enum ${to}`, () => expect(rules(fixture(completeBlock.replace(from, to)))).toContain("subimouto-enum"));
   }
+  it("accepts Effort unavailable", () => {
+    expect(rules(fixture(completeBlock.replace("- Effort: max", "- Effort: unavailable")))).toEqual([]);
+  });
   for (const model of ["gpt-5.6-terra", "gpt-6-astra", "gpt-5.6-luna-max", "subimouto"]) {
     it(`rejects model ${model}`, () => {
       expect(rules(fixture(completeBlock.replace("gpt-5.6-luna", model)))).toContain("subimouto-model");
